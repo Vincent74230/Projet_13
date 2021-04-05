@@ -47,3 +47,14 @@ class Ad(models.Model):
 	pending = models.BooleanField(default=True)
 	date = models.DateTimeField(auto_now=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Services(models.Model):
+	"""All the services offred and required by the members"""
+	name = models.CharField(max_length=100)
+	proposed_services = models.ManyToManyField(User, related_name='proposed_services')
+	required_services = models.ManyToManyField(User, related_name='required_services')
+
+
+class Category(models.Model):
+	"""Services category"""
+	name = models.CharField(max_length=100)
