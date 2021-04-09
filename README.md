@@ -11,7 +11,7 @@ https://www.linkedin.com/in/vincent-nowaczyk/
 Peopleskills est une application d'échange de services entre particuliers  
 
 Les utilisateurs peuvent:  
-- Consulter la liste des memebres inscrits  
+- Consulter la liste des membres inscrits  
 - Créer un compte, éditer leur profil en choisissant des services recherchés et offerts  
 - Trouver un profil particulier en fonction de critères de recherche  
 - Contacter un autre membre via messagerie interne  

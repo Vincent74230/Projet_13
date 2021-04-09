@@ -10,6 +10,7 @@ class User(AbstractUser):
 
     postcode = models.CharField(max_length=5)
     verified_status = models.BooleanField(default=False)
+    gender = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username
@@ -77,7 +78,7 @@ class Services(models.Model):
     name = models.CharField(max_length=100)
     proposed_services = models.ManyToManyField(User, related_name="proposed_services")
     required_services = models.ManyToManyField(User, related_name="required_services")
-    service_id = models.ForeignKey(Category, null=True, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return str(self.name)
