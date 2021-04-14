@@ -70,12 +70,15 @@ class Command(BaseCommand):
 
         # Populate User
         for _ in range(nb_users):
+            genders = random.choice([True,False])
             fake_user = models.User(
                 password=fake.password(),
                 username=fake.user_name(),
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.ascii_email(),
+                postcode=fake.postcode(),
+                gender=genders,
             )
             fake_user.save()
 
