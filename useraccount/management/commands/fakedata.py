@@ -9,20 +9,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        delete_all_users = models.Services.objects.all()
-        delete_all_users.delete()
+        models.Services.objects.all().delete()
 
-        delete_all_users = models.Category.objects.all()
-        delete_all_users.delete()
+        models.Category.objects.all().delete()
 
-        delete_all_ads = models.Ad.objects.all()
-        delete_all_ads.delete()
+        models.Ad.objects.all().delete()
 
-        delete_all_scores = models.Rating.objects.all()
-        delete_all_scores.delete()
+        models.Rating.objects.all().delete()
 
-        delete_all_users = models.User.objects.all()
-        delete_all_users.delete()
+        models.User.objects.all().delete()
 
         fake = Faker()
         # users you want to create
