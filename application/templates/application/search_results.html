@@ -32,9 +32,22 @@
                  <p>Annonces({{nb_annonces}}) Membres({{nb_users}})</p>
                 </div>
                 <div class="col-sm-4 services-menu">
-                 <h5>Catégories</h5>
-                 {% for cat in categories %}
-                 <p>{{cat}}</p>
+                 <h4>Catégories</h4>
+                 {% for key, value in category_dict.items %}
+                 <form action="{% url 'application:search_results' %}" method="post">
+                    {% csrf_token %}
+                    <input type='hidden' name="which_category" value="{{key}}">
+                    <input class="cat_button" type="submit" value="{{key}} ({{value}})">
+                 </form>
+                 {% for service_key, service_value in service_dict.items %}
+                 {% if category_choice == key %}
+                 {% if service_key == key %}
+                 {% for k,v in service_value.items %}
+                 <p>{{k}} ({{v}})</p>
+                 {% endfor %}
+                 {% endif %}
+                 {% endif %}
+                 {% endfor %}
                  {% endfor %}
                 </div>
                 <div class="col-sm-8 services-menu">

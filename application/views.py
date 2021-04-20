@@ -8,6 +8,9 @@ def index(request):
 
 def search_results(request):
 	"""Returns user search results"""
+	category_choice = ''
+	if request.method == 'POST':
+		category_choice = request.POST.get('which_category')
 	categories = Category.objects.all()
 	services_dict = {}
 	category_dict = {}
@@ -20,12 +23,13 @@ def search_results(request):
 			users_service += User.objects.filter(proposed_services__name=service.name).count()
 		category_dict[category.name] = users_service
 		services_dict[category.name] = single_service_dict
-	print ("services_dict : {}".format(services_dict))
-	print ("cat_dict : {}".format(category_dict))
 
 	context = {
 	'nb_users':len(User.objects.all()),
 	'nb_annonces':len(Ad.objects.all()),
 	'categories':Category.objects.all(),
+	'category_dict':category_dict,
+	'service_dict':services_dict,
+	'category_choice':category_choice,
 	}
 	return render (request, "application/search_results.html", context)
