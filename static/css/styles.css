@@ -10515,3 +10515,18 @@ section#contact form#contactForm :-ms-input-placeholder {
   margin-bottom: 10px;
   padding: 0;
 }
+
+.service_button{
+  background: none;
+  border: none;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0;
+}
+
+.upper_reduced_profile{
+  height: 40%;
+  border-bottom: 1px solid black;
+}

@@ -32,9 +32,9 @@
                  <p>Annonces({{nb_annonces}}) Membres({{nb_users}})</p>
                 </div>
                 <div class="col-sm-4 services-menu">
-                 <h4>Catégories</h4>
+                 <h4 id='cat'>Catégories</h4>
                  {% for key, value in category_dict.items %}
-                 <form action="{% url 'application:search_results' %}" method="post">
+                 <form action="{% url 'application:search_results' %}#cat" method="post">
                     {% csrf_token %}
                     <input type='hidden' name="which_category" value="{{key}}">
                     <input class="cat_button" type="submit" value="{{key}} ({{value}})">
@@ -43,7 +43,11 @@
                  {% if category_choice == key %}
                  {% if service_key == key %}
                  {% for k,v in service_value.items %}
-                 <p>{{k}} ({{v}})</p>
+                 <form action="{% url 'application:search_results' %}" method="post">
+                    {% csrf_token %}
+                    <input type='hidden' name="which_service" value="{{k}}">
+                    <input class="service_button" type="submit" value="{{k}} ({{v}})">
+                 </form>
                  {% endfor %}
                  {% endif %}
                  {% endif %}
@@ -51,8 +55,32 @@
                  {% endfor %}
                 </div>
                 <div class="col-sm-8 services-menu">
-                 <p>Hello</p>
-                 <p>Test</p>
+                    <div class = "row">
+                        <div class="col-sm-3">
+                            <p><img src="{% static 'assets/img/avatar_f.svg' %}" alt=""/></p>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="row" class="upper_reduced_profile">
+                                <p>hnjioazuefhn</p>
+                            </div>
+                            <div class="row">
+                                <p>iochdjnaioefjuzi</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "row">
+                        <div class="col-sm-3">
+                            <p><img src="{% static 'assets/img/avatar_m.svg' %}" alt=""/></p>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="row" class="upper_reduced_profile">
+                                <p>hnjioazuefhn</p>
+                            </div>
+                            <div class="row">
+                                <p>iochdjnaioefjuzi</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
