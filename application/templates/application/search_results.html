@@ -9,13 +9,36 @@
                 <div class="container">
                         <div class="row">
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Région</a>
+                                <select name="region" id="region-menu" class="custom-select">
+                                    <option value="Toute" selected>Toute la France/Régions</option>
+                                    <option value="auvergne">Auvergne Rhône Alpes</option>
+                                    <option value="bretagne">Bretagne</option>
+                                    <option value="bourgogne">Bourgogne-Franche-Compté</option>
+                                    <option value="centre">Centre-Val de Loire</option>
+                                    <option value="corse">Corse</option>
+                                    <option value="grandest">Grand Est</option>
+                                    <option value="guadeloupe">Guadeloupe</option>
+                                    <option value="guyanne">Guyanne</option>
+                                    <option value="hautsdefrance">Hauts-de-France</option>
+                                    <option value="iledefrance">Île-de-France</option>
+                                    <option value="martinique">Martinique</option>
+                                    <option value="mayotte">Mayotte</option>
+                                    <option value="normandie">Normandie</option>
+                                    <option value="nouvelleaquitaine">Nouvelle-Acquitaine</option>
+                                    <option value="occitanie">Occitanie</option>
+                                    <option value="paysdelaloire">Pays-de la Loire</option>
+                                    <option value="paca">Provence-Alpes-Côte d'Azur</option>
+                                    <option value="reunion">Réunion</option>
+                                </select>
                             </div>
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Département</a>
+                                <select name="departement" id="departement-menu" class="custom-select">
+                                </select>
                             </div>
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Catégorie</a>
+                                <select>
+                                    
+                                </select>
                             </div>
                             <div class="col-lg-3">
                             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Rechercher</a>
@@ -33,27 +56,10 @@
                 </div>
                 <div class="col-sm-4 services-menu">
                  <h4 id='cat'>Catégories</h4>
-                 {% for key, value in category_dict.items %}
-                 <form action="{% url 'application:search_results' %}#cat" method="post">
-                    {% csrf_token %}
-                    <input type='hidden' name="which_category" value="{{key}}">
-                    <input class="cat_button" type="submit" value="{{key}} ({{value}})">
-                 </form>
-                 {% for service_key, service_value in service_dict.items %}
-                 {% if category_choice == key %}
-                 {% if service_key == key %}
-                 {% for k,v in service_value.items %}
-                 <form action="{% url 'application:search_results' %}" method="post">
-                    {% csrf_token %}
-                    <input type='hidden' name="which_service" value="{{k}}">
-                    <input class="service_button" type="submit" value="{{k}} ({{v}})">
-                 </form>
-                 {% endfor %}
-                 {% endif %}
-                 {% endif %}
-                 {% endfor %}
-                 {% endfor %}
+                 
+
                 </div>
+                {% for user in users_info %}
                 <div class="col-sm-8 services-menu">
                     <div class = "row">
                         <div class="col-sm-3">
@@ -68,20 +74,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "row">
-                        <div class="col-sm-3">
-                            <p><img src="{% static 'assets/img/avatar_m.svg' %}" alt=""/></p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="row" class="upper_reduced_profile">
-                                <p>hnjioazuefhn</p>
-                            </div>
-                            <div class="row">
-                                <p>iochdjnaioefjuzi</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
 {% endblock %}

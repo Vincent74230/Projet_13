@@ -6,16 +6,49 @@ def index(request):
     """Returns app main page"""
     return render(request, "application/index.html")
 
-def search_results(request):
+def search_results(request, cat_choice='cours', serv_choice='Cuisine'):
 	"""Returns user search results"""
-	category_choice = ''
-	service_choice = ''
+	
+	category_choice = cat_choice
+	service_choice = serv_choice
+	categories = Category.objects.all()
+
+	
+
+	users_info = {}
+	users = User.objects.all()
+	for user in users:
+		single_user_info = {}
+		single_user_info['user_id'] = user.id
+		single_user_info['username'] = user.username
+		single_user_info['postcode'] = user.postcode
+		single_user_info['gender'] = user.gender
+		users_info[user.id] = single_user_info
+
+
+	context = {
+	'nb_users':len(User.objects.all()),
+	'nb_annonces':len(Ad.objects.all()),
+	'users_info':users_info,
+	}
+	
+
+	return render (request, "application/search_results.html", context)
+
+	"""
 	if request.method == 'POST':
 		category_choice = request.POST.get('which_category')
 		service_choice = request.POST.get('which_service')
 	print (category_choice)
 	print (service_choice)
+	
 
+	if request.method == 'GET':
+		category_choice = cat_choice
+		service_choice = serv_choice
+		print (category_choice)
+		print (service_choice)
+	
 	categories = Category.objects.all()
 	services_dict = {}
 	category_dict = {}
@@ -28,6 +61,8 @@ def search_results(request):
 			users_service += User.objects.filter(proposed_services__name=service.name).count()
 		category_dict[category.name] = users_service
 		services_dict[category.name] = single_service_dict
+	
+
 	'''
 	users = []
 	all_users = User.objects.all()
@@ -45,9 +80,9 @@ def search_results(request):
 		for required_service in user_required_services:
 			required_services.append(required_service.name)
 		single_user["required"] = proposed_services
-
 	'''
-
+	
+	
 	context = {
 	'nb_users':len(User.objects.all()),
 	'nb_annonces':len(Ad.objects.all()),
@@ -56,4 +91,4 @@ def search_results(request):
 	'service_dict':services_dict,
 	'category_choice':category_choice,
 	}
-	return render (request, "application/search_results.html", context)
+	"""
