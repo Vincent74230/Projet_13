@@ -6,14 +6,18 @@ def index(request):
     """Returns app main page"""
     return render(request, "application/index.html")
 
-def search_results(request, cat_choice='cours', serv_choice='Cuisine'):
+def search_results(request):
 	"""Returns user search results"""
-	
-	category_choice = cat_choice
-	service_choice = serv_choice
-	categories = Category.objects.all()
 
-	
+	region = request.GET.get('region')
+	departement = request.GET.get('departement')
+	category = request.GET.get('category')
+
+	print (region, departement, category)
+	categories = Category.objects.all()
+	cat_names = ['Catégories']
+	for category in categories:
+		cat_names.append(category.name)
 
 	users_info = {}
 	users = User.objects.all()
@@ -30,6 +34,7 @@ def search_results(request, cat_choice='cours', serv_choice='Cuisine'):
 	'nb_users':len(User.objects.all()),
 	'nb_annonces':len(Ad.objects.all()),
 	'users_info':users_info,
+	'cat_names':cat_names,
 	}
 	
 

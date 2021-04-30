@@ -55,27 +55,7 @@
     $(window).scroll(navbarCollapse);
 })(jQuery); // End of use strict
 
-/*
-var region=document.getElementById('region-menu');
-var departement=document.getElementById('departement-menu');
 
-
-region.addEventListener('change',function(){
-
-    var selected_region=departements[this.value];
-
-
-    while(departement.options.length > 0){
-        departement.options.remove(0);
-    }
-
-    Array.from(selected_region).forEach(function(el){
-    let option = new Option(el, el);
-    departement.appendChild(option);
-});
-
-});
-*/
 var departements = {
     Toute:[
     "Departements", 
