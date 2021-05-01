@@ -7,29 +7,14 @@
                 <div class="masthead-subheading">PeopleSkills est une plateforme d'échange de biens et services entre particuliers</div>
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
+                    {{ departements_dict|json_script:"departements_dict" }}
                     <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
                             <div class="col-lg-3">
                                 <select name="region" id="region-menu" class="custom-select">
-                                    <option value="Toute" selected>Toute la France/Régions</option>
-                                    <option value="auvergne">Auvergne Rhône Alpes</option>
-                                    <option value="bretagne">Bretagne</option>
-                                    <option value="bourgogne">Bourgogne-Franche-Compté</option>
-                                    <option value="centre">Centre-Val de Loire</option>
-                                    <option value="corse">Corse</option>
-                                    <option value="grandest">Grand Est</option>
-                                    <option value="guadeloupe">Guadeloupe</option>
-                                    <option value="guyanne">Guyanne</option>
-                                    <option value="hautsdefrance">Hauts-de-France</option>
-                                    <option value="iledefrance">Île-de-France</option>
-                                    <option value="martinique">Martinique</option>
-                                    <option value="mayotte">Mayotte</option>
-                                    <option value="normandie">Normandie</option>
-                                    <option value="nouvelleaquitaine">Nouvelle-Acquitaine</option>
-                                    <option value="occitanie">Occitanie</option>
-                                    <option value="paysdelaloire">Pays-de la Loire</option>
-                                    <option value="paca">Provence-Alpes-Côte d'Azur</option>
-                                    <option value="reunion">Réunion</option>
+                                    {% for key in departements_dict %}
+                                    <option value="{{key}}">{{key}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-lg-3">

@@ -1,5 +1,7 @@
+import json
 from django.shortcuts import render
 from useraccount.models import User, Ad, Category, Services
+from .annex import departements
 
 
 def index(request):
@@ -30,11 +32,16 @@ def search_results(request):
 		users_info[user.id] = single_user_info
 
 
+	departements_json = json.dumps(departements)
+	departements_json = json.loads(departements_json)
+
 	context = {
 	'nb_users':len(User.objects.all()),
 	'nb_annonces':len(Ad.objects.all()),
 	'users_info':users_info,
 	'cat_names':cat_names,
+	'departements_dict':departements,
+	'departements_json':departements_json,
 	}
 	
 
