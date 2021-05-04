@@ -8,6 +8,7 @@
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
                     {{ departements_dict|json_script:"departements_dict" }}
+                    <div>{{user_fields}}</div>
                     <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
                             <div class="col-lg-3">

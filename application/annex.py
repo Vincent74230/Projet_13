@@ -1,8 +1,8 @@
 '''file contains region and departement dict'''
 
 departements = {
-    'Toute la France/Région':[
-    "Departements", 
+    'Toute la France/Régions':[
+    "Tous les départements", 
     "Ain", 
     "Aisne", 
     "Allier",
@@ -106,6 +106,7 @@ departements = {
     "Mayotte"
     ],
     'Auvergne-Rhônes-Alpes':[
+    "Tous les départements",
     "Ain",
     "Allier",
     "Ardèche",
@@ -120,6 +121,7 @@ departements = {
     "Savoie"
     ],
     'Bourgogne-Franche-Comté':[
+    "Tous les départements",
     "Côte-d'Or",
     "Doubs",
     "Haute-Saône",
@@ -130,12 +132,14 @@ departements = {
     "Yonne"
     ],
     'Bretagne':[
+    "Tous les départements",
     "Côtes d'Armor",
     "Finistère",
     "Ille-et-Vilaine",
     "Morbihan"
     ],
     'Centre-Val de Loire':[
+    "Tous les départements",
     "Cher",
     "Eure-et-Loir",
     "Indre",
@@ -144,10 +148,12 @@ departements = {
     "Loiret"
     ],
     'Corse':[
+    "Tous les départements",
     "Corse-du-Sud",
     "Haute-Corse"
     ],
     'Grand Est':[
+    "Tous les départements",
     "Ardennes",
     "Aube",
     "Bas-Rhin",
@@ -160,12 +166,15 @@ departements = {
     "Vosges"
     ],
     'Guadeloupe':[
+    "Tous les départements",
     "Guadeloupe"
     ],
     'Guyanne':[
+    "Tous les départements",
     "Guyane",
     ],
     'Hauts-de-France':[
+    "Tous les départements",
     "Aisne",
     "Nord",
     "Oise",
@@ -173,6 +182,7 @@ departements = {
     "Somme"
     ],
     'Ile-de-France':[
+    "Tous les départements",
     "Essonne",
     "Hauts-de-Seine",
     "Paris",
@@ -183,12 +193,15 @@ departements = {
     "Yvelines"
     ],
     'Martinique':[
+    "Tous les départements",
     "Martinique"
     ],
     'Mayotte':[
+    "Tous les départements",
     "Mayotte"
     ],
     'Normandie':[
+    "Tous les départements",
     "Calvados",
     "Eure",
     "Manche",
@@ -196,6 +209,7 @@ departements = {
     "Seine-Maritime"
     ],
     'Nouvelle-Aquitaine':[
+    "Tous les départements",
     "Charente",
     "Charente-Maritime",
     "Corrèze",
@@ -210,6 +224,7 @@ departements = {
     "Vienne"
     ],
     'Occitanie':[
+    "Tous les départements",
     "Ariège",
     "Aude",
     "Aveyron",
@@ -225,6 +240,7 @@ departements = {
     "Tarn-et-Garonne"
     ],
     'Pays de la Loire':[
+    "Tous les départements",
     "Loire-Atlantique",
     "Maine-et-Loire",
     "Mayenne",
@@ -232,6 +248,7 @@ departements = {
     "Vendée"
     ],
     "Provence-Alpes-Côte d'Azur":[
+    "Tous les départements",
     "Alpes-de-Haute-Provence",
     "Alpes-Maritimes",
     "Bouches-du-Rhône",
@@ -240,6 +257,7 @@ departements = {
     "Vaucluse"
     ],
     'Réunion':[
+    "Tous les départements",
     "La Réunion"
     ]
 }

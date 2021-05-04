@@ -55,16 +55,24 @@
     $(window).scroll(navbarCollapse);
 })(jQuery); // End of use strict
 
+// Customization by https://github.com/Vincent74230
 
-var departements = JSON.parse(document.getElementById('departements_dict').textContent)
+
+var departements = JSON.parse(document.getElementById('departements_dict').textContent);
 var region=document.getElementById('region-menu');
 var departement=document.getElementById('departement-menu');
+
+
+var selected_region=departements['Toute la France/Régions'];
+Array.from(selected_region).forEach(function(el){
+let option = new Option(el, el);
+departement.appendChild(option);
+});
 
 
 region.addEventListener('change',function(){
 
     var selected_region=departements[this.value];
-
 
     while(departement.options.length > 0){
         departement.options.remove(0);
@@ -74,5 +82,4 @@ region.addEventListener('change',function(){
     let option = new Option(el, el);
     departement.appendChild(option);
 });
-
 });
