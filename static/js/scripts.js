@@ -62,13 +62,14 @@ var departements = JSON.parse(document.getElementById('departements_dict').textC
 var region=document.getElementById('region-menu');
 var departement=document.getElementById('departement-menu');
 
-
-var selected_region=departements['Toute la France/Régions'];
+var selected_region=departements[region.value];
 Array.from(selected_region).forEach(function(el){
 let option = new Option(el, el);
 departement.appendChild(option);
 });
 
+var dep_choice_pos = document.querySelector('#dep_choice_position');
+document.getElementById('departement-menu').value=(departements[region.value][dep_choice_pos.dataset.value]);
 
 region.addEventListener('change',function(){
 

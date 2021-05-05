@@ -8,13 +8,17 @@
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
                     {{ departements_dict|json_script:"departements_dict" }}
-                    <div>{{user_fields}}</div>
+                    <div id="dep_choice_position" data-value="{{departement_choice_position}}" hidden>{{departement_choice_position}}</div>
                     <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
                             <div class="col-lg-3">
                                 <select name="region" id="region-menu" class="custom-select">
                                     {% for key in departements_dict %}
+                                    {% if region == key %}
+                                    <option value="{{key}}" selected>{{key}}</option>
+                                    {% else %}
                                     <option value="{{key}}">{{key}}</option>
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -25,7 +29,11 @@
                             <div class="col-lg-3">
                                 <select name="category" class="custom-select">
                                     {% for cat_name in cat_names %}
-                                        <option value="{{cat_name}}">{{cat_name}}</option>
+                                    {% if category == cat_name %}
+                                    <option value="{{cat_name}}"selected>{{cat_name}}</option>
+                                    {% else %}
+                                    <option value="{{cat_name}}">{{cat_name}}</option>
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

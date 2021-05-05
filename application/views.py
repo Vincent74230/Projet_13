@@ -14,14 +14,13 @@ def search_results(request):
 	region = request.GET.get('region')
 	departement = request.GET.get('departement')
 	category = request.GET.get('category')
-	
-	user_fields = {'region':region, 'departement':departement, 'category':category}
+
 
 	print (region, departement, category)
 	categories = Category.objects.all()
-	cat_names = ['Catégories']
-	for category in categories:
-		cat_names.append(category.name)
+	cat_names = ['Toutes les catégories']
+	for cat in categories:
+		cat_names.append(cat.name)
 
 	users_info = {}
 	users = User.objects.all()
@@ -32,15 +31,21 @@ def search_results(request):
 		single_user_info['postcode'] = user.postcode
 		single_user_info['gender'] = user.gender
 		users_info[user.id] = single_user_info
-
-
+	
+	departement_choice_position = 0
+	if region:
+		departement_choice_position = departements[region].index(departement)
+	
 	context = {
 	'nb_users':len(User.objects.all()),
 	'nb_annonces':len(Ad.objects.all()),
 	'users_info':users_info,
 	'cat_names':cat_names,
 	'departements_dict':departements,
-	'user_fields':user_fields,
+	'region':region,
+	'departement':departement,
+	'category':category,
+	'departement_choice_position':departement_choice_position,
 	}
 	
 
