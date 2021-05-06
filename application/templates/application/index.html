@@ -7,20 +7,33 @@
                 <div class="masthead-subheading">PeopleSkills est une plateforme d'échange de biens et services entre particuliers</div>
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
+                    {{ departements_dict|json_script:"departements_dict" }}
+                    <div id="dep_choice_position" data-value="{{departement_choice_position}}" hidden></div>
+                    <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Région</a>
+                                <select name="region" id="region-menu" class="custom-select">
+                                    {% for key in departements_dict %}
+                                    <option value="{{key}}">{{key}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Département</a>
+                                <select name="departement" id="departement-menu" class="custom-select">
+                                </select>
                             </div>
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Catégorie</a>
+                                <select name="category" class="custom-select">
+                                    {% for cat_name in cat_names %}
+                                    <option value="{{cat_name}}">{{cat_name}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-lg-3">
-                            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Rechercher</a>
+                                <input type="submit" value="Rechercher">
                             </div>
                     </div>
+                </form>
             </div>
         </header>
         <!-- Services-->

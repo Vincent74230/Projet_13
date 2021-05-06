@@ -1,4 +1,3 @@
-import json
 from django.shortcuts import render
 from useraccount.models import User, Ad, Category, Services
 from .annex import departements
@@ -6,22 +5,35 @@ from .annex import departements
 
 def index(request):
     """Returns app main page"""
-    return render(request, "application/index.html")
+    categories = Category.objects.all()
+    cat_names = ['Toutes les catégories']
+    for cat in categories:
+    	cat_names.append(cat.name)
+
+    departement_choice_position = 0
+    
+    context = {
+    'cat_names':cat_names,
+    'departements_dict':departements,
+    'departement_choice_position':departement_choice_position,
+    }
+    return render(request, "application/index.html", context)
 
 def search_results(request):
 	"""Returns user search results"""
 
+	#fetching user choices in search bar
 	region = request.GET.get('region')
 	departement = request.GET.get('departement')
 	category = request.GET.get('category')
 
-
-	print (region, departement, category)
+	#gathering categories available in DB, making a list of it
 	categories = Category.objects.all()
 	cat_names = ['Toutes les catégories']
 	for cat in categories:
 		cat_names.append(cat.name)
 
+	#gathering users info
 	users_info = {}
 	users = User.objects.all()
 	for user in users:
@@ -32,6 +44,8 @@ def search_results(request):
 		single_user_info['gender'] = user.gender
 		users_info[user.id] = single_user_info
 	
+	#the search bar needs the position of a departement in the scroll menu,
+	#to reposition it as it was before the submit click
 	departement_choice_position = 0
 	if region:
 		departement_choice_position = departements[region].index(departement)
