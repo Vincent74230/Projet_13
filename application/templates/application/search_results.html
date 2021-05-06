@@ -8,7 +8,7 @@
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
                     {{ departements_dict|json_script:"departements_dict" }}
-                    <div id='cat' data-value="{{category}}"hidden></div>
+                    <div id='category' data-value="{{cate}}"hidden></div>
                     <div id="dep_choice_position" data-value="{{departement_choice_position}}" hidden></div>
                     <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
@@ -30,7 +30,7 @@
                             <div class="col-lg-3">
                                 <select name="category" class="custom-select">
                                     {% for cat_name in cat_names %}
-                                    {% if category == cat_name %}
+                                    {% if cate == cat_name %}
                                     <option value="{{cat_name}}"selected>{{cat_name}}</option>
                                     {% else %}
                                     <option value="{{cat_name}}">{{cat_name}}</option>

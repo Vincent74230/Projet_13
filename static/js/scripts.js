@@ -86,16 +86,10 @@ region.addEventListener('change',function(){
 });
 
 
-var cat_choice = document.getElementById('cat');
-alert(cat_choice.dataset.value);
+var cat_choice = document.getElementById('category');
 var sel_cat = document.getElementsByClassName('selected_category');
-//alert(sel_cat[1].dataset.value);
-/*
-sel_cat[1].style.display='none';
 for (var x=0; x<sel_cat.length; x++){
-    alert(sel_cat[x].dataset.value);
     if (sel_cat[x].dataset.value != cat_choice.dataset.value){
-        alert('hello');
+        sel_cat[x].style.display='none';
     };
 }
-*/

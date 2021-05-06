@@ -25,7 +25,7 @@ def search_results(request):
 	#fetching user choices in search bar
 	region = request.GET.get('region')
 	departement = request.GET.get('departement')
-	category = request.GET.get('category')
+	cate = request.GET.get('category')
 
 	#gathering categories available in DB, making a list of it
 	categories = Category.objects.all()
@@ -70,7 +70,7 @@ def search_results(request):
 	'departements_dict':departements,
 	'region':region,
 	'departement':departement,
-	'category':category,
+	'cate':cate,
 	'departement_choice_position':departement_choice_position,
 	'cat_dict':category_dict,
 	'services_dict':services_dict,
