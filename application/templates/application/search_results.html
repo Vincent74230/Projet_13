@@ -8,6 +8,7 @@
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
                 <div class="container">
                     {{ departements_dict|json_script:"departements_dict" }}
+                    <div id='cat' data-value="{{category}}"hidden></div>
                     <div id="dep_choice_position" data-value="{{departement_choice_position}}" hidden></div>
                     <form method = 'get' action = "{% url 'application:search_results' %}">
                         <div class="row">
@@ -53,9 +54,18 @@
                  <p>Annonces({{nb_annonces}}) Membres({{nb_users}})</p>
                 </div>
                 <div class="col-sm-4 services-menu">
-                 <h4 id='cat'>Catégories</h4>
-                 
-
+                 {% for category_name, users_in_cat in cat_dict.items %}
+                    <p>{{category_name}} ({{users_in_cat}})</p>
+                    <ul class='selected_category' data-value="{{category_name}}">
+                        {% for key, small_services_dict in services_dict.items %}
+                            {% if key == category_name %}
+                                {% for k,v in small_services_dict.items %}
+                                <li>{{k}} ({{v}})</li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                 {% endfor %}
                 </div>
                 {% for user in users_info %}
                 <div class="col-sm-8 services-menu">

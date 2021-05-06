@@ -11,7 +11,7 @@ def index(request):
     	cat_names.append(cat.name)
 
     departement_choice_position = 0
-    
+
     context = {
     'cat_names':cat_names,
     'departements_dict':departements,
@@ -49,6 +49,18 @@ def search_results(request):
 	departement_choice_position = 0
 	if region:
 		departement_choice_position = departements[region].index(departement)
+
+	services_dict = {}
+	category_dict = {}
+	for category in categories:
+		services_per_category = Services.objects.filter(category__name=category.name)
+		single_service_dict = {}
+		users_service = 0
+		for service in services_per_category:
+			single_service_dict[service.name] = User.objects.filter(proposed_services__name=service.name).count()
+			users_service += User.objects.filter(proposed_services__name=service.name).count()
+		category_dict[category.name] = users_service
+		services_dict[category.name] = single_service_dict
 	
 	context = {
 	'nb_users':len(User.objects.all()),
@@ -60,6 +72,8 @@ def search_results(request):
 	'departement':departement,
 	'category':category,
 	'departement_choice_position':departement_choice_position,
+	'cat_dict':category_dict,
+	'services_dict':services_dict,
 	}
 	
 
