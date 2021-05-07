@@ -54,13 +54,14 @@
                  <p>Annonces({{nb_annonces}}) Membres({{nb_users}})</p>
                 </div>
                 <div class="col-sm-4 services-menu">
+                <h4>Catégories</h4>
                  {% for category_name, users_in_cat in cat_dict.items %}
                     <a href="{% url 'application:search_results' %}?region={{region}}&departement={{departement}}&category={{category_name}}">{{category_name}} ({{users_in_cat}})</a></br>
                     <ul class='selected_category' data-value="{{category_name}}">
                         {% for key, small_services_dict in services_dict.items %}
                             {% if key == category_name %}
                                 {% for k,v in small_services_dict.items %}
-                                <li>{{k}} ({{v}})</li>
+                                <li><a href="{% url 'application:search_results' %}?region={{region}}&departement={{departement}}&category={{category_name}}&service={{k}}">{{k}} ({{v}})</a></li>
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
