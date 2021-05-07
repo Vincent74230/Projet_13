@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-sm-4 services-menu">
                  {% for category_name, users_in_cat in cat_dict.items %}
-                    <p>{{category_name}} ({{users_in_cat}})</p>
+                    <a href="{% url 'application:search_results' %}?region={{region}}&departement={{departement}}&category={{category_name}}">{{category_name}} ({{users_in_cat}})</a></br>
                     <ul class='selected_category' data-value="{{category_name}}">
                         {% for key, small_services_dict in services_dict.items %}
                             {% if key == category_name %}
