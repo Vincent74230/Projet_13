@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from faker import Faker
+from faker import Factory
 from ... import models
 import random
 
@@ -19,13 +19,13 @@ class Command(BaseCommand):
 
         models.User.objects.all().delete()
 
-        fake = Faker()
+        fake = Factory.create('fr_FR')
         # users you want to create
         nb_users = 100
 
         # Services dictionnary sorted by categories
         services_dict = {
-            "cours": [
+            "Cours": [
                 "Cuisine",
                 "Musique",
                 "Informatique",
@@ -33,14 +33,13 @@ class Command(BaseCommand):
                 "Soutien scolaire",
                 "Coaching",
             ],
-            "bricolage": [
+            "Bricolage": [
                 "Electricité",
                 "Maçonnerie",
                 "Menuiserie",
                 "Plomberie",
                 "Tapisserie",
                 "Peinture",
-                "Jardinage",
             ],
             "Travail": [
                 "Comptabilité",
@@ -55,6 +54,13 @@ class Command(BaseCommand):
                 "Vente",
                 "Petites réparations",
                 "Grosses réparations",
+            ],
+            "Maison": [
+                "Ameublement",
+                "Colocation",
+                "Décoration",
+                "Jardinage",
+                "Gardiennage",
             ],
         }
         # just making a 1 to 100 list..
