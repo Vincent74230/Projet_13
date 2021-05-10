@@ -89,4 +89,87 @@ def filter_results(region, departement, category, service):
                     proposed_services__category__name=category,
                 )
 
+    # 7th: 'departement' and 'category' selected
+    if not region and departement and category and not service:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            users = User.objects.filter(
+                postcode__startswith=dep_number,
+                proposed_services__category__name=category,
+            )
+        else:
+            users = User.objects.filter(
+                postcode__startswith=dep_number,
+                proposed_services__category__name=category,
+            )
+
+    # 8th: 'region', 'departement' and 'category' selected
+    if region and departement and category and not service:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            users = User.objects.filter(
+                postcode__startswith=dep_number,
+                proposed_services__category__name=category,
+            )
+        else:
+            users = User.objects.filter(
+                postcode__startswith=dep_number,
+                proposed_services__category__name=category,
+            )
+
+    # 9th: Only 'category' and 'service' selected
+    if not region and not departement and category and service:
+        users = User.objects.filter(proposed_services__name=service)
+
+    # 10th: 'departement', 'category' and 'service' selected
+    if not region and departement and category and service:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            users = User.objects.filter(
+                postcode__startswith=dep_number, proposed_services__name=service
+            )
+        else:
+            users = User.objects.filter(
+                postcode__startswith=dep_number, proposed_services__name=service
+            )
+
+    # 11th: 'region', 'category' and 'service' selected
+    if region and not departement and category and service:
+        # just fetching all departement numbers in this region
+        departements_in_region = departements[region]
+        departements_number_in_region = []
+        for departement_name in departements_in_region:
+            for name, number in departements_number.items():
+                if name == departement_name:
+                    departements_number_in_region.append(number)
+
+        if len(departements_number_in_region[0]) == 3:
+            users = User.objects.filter(
+                postcode__startswith=departements_number_in_region[0],
+                proposed_services__name=service,
+            )
+        else:
+            if departements_number_in_region[0] == "20":
+                departements_number_in_region.pop()
+            users = User.objects.filter(
+                postcode__startswith=departements_number_in_region[0],
+                proposed_services__name=service,
+            )
+            for dep_number in departements_number_in_region[1:]:
+                users = users | User.objects.filter(
+                    postcode__startswith=dep_number,
+                    proposed_services__name=service,
+                )
+    # 12th: 'region, 'departement', 'category' and 'service':
+    if region and departement and category and service:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            users = User.objects.filter(
+                postcode__startswith=dep_number, proposed_services__name=service
+            )
+        else:
+            users = User.objects.filter(
+                postcode__startswith=dep_number, proposed_services__name=service
+            )
+
     return users
