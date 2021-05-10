@@ -71,7 +71,7 @@ class Command(BaseCommand):
 
         # Populate User
         for _ in range(nb_users):
-            genders = random.choice([True,False])
+            genders = random.choice([True, False])
             fake_user = models.User(
                 password=fake.password(),
                 username=fake.user_name(),

@@ -72,14 +72,30 @@
                 <div class="col-sm-8 services-menu">
                     <div class = "row">
                         <div class="col-sm-3">
-                            <p><img src="{% static 'assets/img/avatar_f.svg' %}" alt=""/></p>
+                            {% if user.gender %}
+                                <p><img src="{% static 'assets/img/avatar_m.svg' %}" alt=""/></p>
+                            {% else %}
+                                <p><img src="{% static 'assets/img/avatar_f.svg' %}" alt=""/></p>
+                            {% endif %}
                         </div>
                         <div class="col-sm-9">
                             <div class="row" class="upper_reduced_profile">
-                                <p>hnjioazuefhn</p>
+                                <p>{{user.username}}</p>
                             </div>
                             <div class="row">
-                                <p>iochdjnaioefjuzi</p>
+                                <p>{{user.postcode}}</p>
+                            </div>
+                            <div class="row">
+                                <p>Services recherchés:</p>
+                                {% for required_service in user.required_services %}
+                                    <p>{{required_service.name}}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="row">
+                                <p>Sercices proposés:</p>
+                                {% for proposed_service in user.proposed_services %}
+                                    <p>{{proposed_service.name}}</p>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

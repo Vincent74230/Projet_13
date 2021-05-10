@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from useraccount.models import User, Ad, Category, Services
 from .departements_list import departements
+from .search_extend import filter_results
 
 
 def index(request):
@@ -34,23 +35,13 @@ def search_results(request):
     for cat in categories:
         cat_names.append(cat.name)
 
-    #gathering users info
-    users_info = {}
-    users = User.objects.all()
-    for user in users:
-        single_user_info = {}
-        single_user_info['user_id'] = user.id
-        single_user_info['username'] = user.username
-        single_user_info['postcode'] = user.postcode
-        single_user_info['gender'] = user.gender
-        users_info[user.id] = single_user_info
-    
     #the search bar needs the position of a departement in the scroll menu,
     #to reposition it as it was before the submit click
     departement_choice_position = 0
     if region:
         departement_choice_position = departements[region].index(departement)
-
+       
+    #Returns a dict with services sorted by categories, for display
     services_dict = {}
     category_dict = {}
     for category in categories:
@@ -62,11 +53,12 @@ def search_results(request):
             users_service += User.objects.filter(proposed_services__name=service.name).count()
         category_dict[category.name] = users_service
         services_dict[category.name] = single_service_dict
+
+    users_info = filter_results(region, departement, cate, service_choice)
     
     context = {
     'nb_users':len(User.objects.all()),
     'nb_annonces':len(Ad.objects.all()),
-    'users_info':users_info,
     'cat_names':cat_names,
     'departements_dict':departements,
     'region':region,
@@ -75,6 +67,7 @@ def search_results(request):
     'departement_choice_position':departement_choice_position,
     'cat_dict':category_dict,
     'services_dict':services_dict,
+    'users_info' : users_info,
     }
     
 
