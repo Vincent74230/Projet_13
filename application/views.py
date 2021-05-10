@@ -54,7 +54,20 @@ def search_results(request):
         category_dict[category.name] = users_service
         services_dict[category.name] = single_service_dict
 
-    users_info = filter_results(region, departement, cate, service_choice)
+    #funtion that returns users accordingly to selected fields
+    users = filter_results(region, departement, cate, service_choice)
+
+    #We don't send the whole users info here,
+    #we only send useful datas
+    users_info = []
+    for user in users:
+            single_user_info = {}
+            single_user_info['username'] = user.username
+            single_user_info['postcode'] = user.postcode
+            single_user_info['gender'] = user.gender
+            single_user_info['required_services'] = user.required_services.all()
+            single_user_info['proposed_services'] = user.proposed_services.all()
+            users_info.append(single_user_info)
     
     context = {
     'nb_users':len(User.objects.all()),
