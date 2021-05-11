@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from useraccount.models import User, Ad, Category, Services
+from useraccount.models import User, Category, Services
 from .departements_list import departements
-from .search_extend import filter_results
+from .search_extend import filter_results, counting_users
 
 
 def index(request):
@@ -42,6 +42,9 @@ def search_results(request):
     if region:
         departement_choice_position = departements[region].index(departement)
 
+    # funtion that returns users accordingly to selected fields
+    users = filter_results(region, departement, cate, service_choice)
+    """
     # Returns a dict with services sorted by categories, for display
     services_dict = {}
     category_dict = {}
@@ -58,9 +61,10 @@ def search_results(request):
             ).count()
         category_dict[category.name] = users_service
         services_dict[category.name] = single_service_dict
-
-    # funtion that returns users accordingly to selected fields
-    users = filter_results(region, departement, cate, service_choice)
+    """
+    users_count = counting_users(region, departement)
+    services_dict = users_count[1]
+    category_dict = users_count[0]
 
     # We don't send the whole users info here,
     # we only send useful datas
@@ -76,7 +80,7 @@ def search_results(request):
 
     context = {
         "total_nb_users": len(User.objects.all()),
-        "nb_annonces": len(Ad.objects.all()),
+        "nb_users": len(users),
         "cat_names": cat_names,
         "departements_dict": departements,
         "region": region,
@@ -89,3 +93,9 @@ def search_results(request):
     }
 
     return render(request, "application/search_results.html", context)
+
+
+"""
+{'Cours': {'Cuisine': 10, 'Musique': 9, 'Informatique': 10, 'Langues étrangères': 8, 'Soutien scolaire': 10, 'Coaching': 11}, 'Bricolage': {'Electricité': 5, 'Maçonnerie': 11, 'Menuiserie': 12, 'Plomberie': 8, 'Tapisserie': 8, 'Peinture': 6}, 'Travail': {'Comptabilité': 10, 'Assistance': 10, 'Traduction': 8, 'Secrétariat': 8, "Recherche d'emploi": 12}, 'Vehicules': {'Entretien': 15, 'Location': 19, 'Vente': 14, 'Petites réparations': 15, 'Grosses réparations': 15}, 'Maison': {'Ameublement': 14, 'Colocation': 13, 'Décoration': 20, 'Jardinage': 9, 'Gardiennage': 10}}
+{'Cours': 58, 'Bricolage': 50, 'Travail': 48, 'Vehicules': 78, 'Maison': 66}
+"""

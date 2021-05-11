@@ -173,3 +173,154 @@ def filter_results(region, departement, category, service):
             )
 
     return users
+
+
+def counting_users(region, departement):
+    """function that returns number of users in cat and services accordingly to selected fields"""
+    if region == "Toute la France/Régions":
+        region = None
+    if departement == "Tous les départements":
+        departement = None
+
+    categories = Category.objects.all()
+    services_dict = {}
+    category_dict = {}
+
+    if not region and not departement:
+        for category in categories:
+            category_dict[category.name] = User.objects.filter(
+                proposed_services__category__name=category.name
+            ).count()
+            services_per_category = Services.objects.filter(
+                category__name=category.name
+            )
+            services_count = {}
+            for service in services_per_category:
+                services_count[service.name] = User.objects.filter(
+                    proposed_services__name=service.name
+                ).count()
+            services_dict[category.name] = services_count
+
+    if not region and departement:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            for category in categories:
+                category_dict[category.name] = User.objects.filter(
+                    proposed_services__category__name=category.name,
+                    postcode__startswith=dep_number,
+                ).count()
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                services_count = {}
+                for service in services_per_category:
+                    services_count[service.name] = User.objects.filter(
+                        proposed_services__name=service.name,
+                        postcode__startswith=dep_number,
+                    ).count()
+                services_dict[category.name] = services_count
+        else:
+            for category in categories:
+                category_dict[category.name] = User.objects.filter(
+                    postcode__startswith=dep_number,
+                    proposed_services__category__name=category.name,
+                ).count()
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                services_count = {}
+                for service in services_per_category:
+                    services_count[service.name] = User.objects.filter(
+                        proposed_services__name=service.name,
+                        postcode__startswith=dep_number,
+                    ).count()
+                services_dict[category.name] = services_count
+
+    if region and not departement:
+        # just fetching all departement numbers in this region
+        departements_in_region = departements[region]
+        departements_number_in_region = []
+        for departement_name in departements_in_region:
+            for name, number in departements_number.items():
+                if name == departement_name:
+                    departements_number_in_region.append(number)
+
+        if len(departements_number_in_region[0]) == 3:
+            for category in categories:
+                category_dict[category.name] = User.objects.filter(
+                    proposed_services__category__name=category.name,
+                    postcode__startswith=departements_number_in_region[0],
+                ).count()
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                services_count = {}
+                for service in services_per_category:
+                    services_count[service.name] = User.objects.filter(
+                        proposed_services__name=service.name,
+                        postcode__startswith=departements_number_in_region[0],
+                    ).count()
+                services_dict[category.name] = services_count
+        else:
+            for category in categories:
+                users_in_region = 0
+
+                for departement_number in departements_number_in_region:
+                    users_in_region += User.objects.filter(
+                        proposed_services__category__name=category.name,
+                        postcode__startswith=departement_number,
+                    ).count()
+
+                services_count = {}
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                for service in services_per_category:
+                    total_users_per_service = 0
+                    for dep in departements_number_in_region:
+                        total_users_per_service += User.objects.filter(
+                            proposed_services__name=service.name,
+                            postcode__startswith=dep,
+                        ).count()
+                    services_count[service.name] = total_users_per_service
+
+                category_dict[category.name] = users_in_region
+                services_dict[category.name] = services_count
+
+    if region and departement:
+        dep_number = departements_number[departement]
+        if len(dep_number) == 3:
+            for category in categories:
+                category_dict[category.name] = User.objects.filter(
+                    proposed_services__category__name=category.name,
+                    postcode__startswith=dep_number,
+                ).count()
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                services_count = {}
+                for service in services_per_category:
+                    services_count[service.name] = User.objects.filter(
+                        proposed_services__name=service.name,
+                        postcode__startswith=dep_number,
+                    ).count()
+                services_dict[category.name] = services_count
+        else:
+            for category in categories:
+                category_dict[category.name] = User.objects.filter(
+                    postcode__startswith=dep_number,
+                    proposed_services__category__name=category.name,
+                ).count()
+                services_per_category = Services.objects.filter(
+                    category__name=category.name
+                )
+                services_count = {}
+                for service in services_per_category:
+                    services_count[service.name] = User.objects.filter(
+                        proposed_services__name=service.name,
+                        postcode__startswith=dep_number,
+                    ).count()
+                services_dict[category.name] = services_count
+
+    users_count = [category_dict, services_dict]
+    return users_count
