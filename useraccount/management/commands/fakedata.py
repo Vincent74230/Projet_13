@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from faker import Factory
 from ... import models
 import random
+from ...services import SERVICES_DICT
 
 
 class Command(BaseCommand):
@@ -23,46 +24,9 @@ class Command(BaseCommand):
         # users you want to create
         nb_users = 100
 
-        # Services dictionnary sorted by categories
-        services_dict = {
-            "Cours": [
-                "Cuisine",
-                "Musique",
-                "Informatique",
-                "Langues étrangères",
-                "Soutien scolaire",
-                "Coaching",
-            ],
-            "Bricolage": [
-                "Electricité",
-                "Maçonnerie",
-                "Menuiserie",
-                "Plomberie",
-                "Tapisserie",
-                "Peinture",
-            ],
-            "Travail": [
-                "Comptabilité",
-                "Assistance",
-                "Traduction",
-                "Secrétariat",
-                "Recherche d'emploi",
-            ],
-            "Vehicules": [
-                "Entretien",
-                "Location",
-                "Vente",
-                "Petites réparations",
-                "Grosses réparations",
-            ],
-            "Maison": [
-                "Ameublement",
-                "Colocation",
-                "Décoration",
-                "Jardinage",
-                "Gardiennage",
-            ],
-        }
+        # IMPORTING SERVICES_DICT
+        services_dict = SERVICES_DICT
+
         # just making a 1 to 100 list..
         users_rank = [0]
         for i in range(nb_users - 1):
