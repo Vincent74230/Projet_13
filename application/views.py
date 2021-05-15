@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from useraccount.models import User, Category, Services
 from .departements_list import departements
 from .search_extend import filter_results, counting_users
@@ -30,17 +30,39 @@ def search_results(request):
     cate = request.GET.get("category")
     service_choice = request.GET.get("service")
 
+
     # gathering categories available in DB, making a list of it
     categories = Category.objects.all()
     cat_names = ["Toutes les catégories"]
     for cat in categories:
         cat_names.append(cat.name)
 
+    #conditional block to secure search bar inputs
+    if region:
+        if region in departements:
+            pass
+        else:
+            return redirect("application:index")
+    
+    if departement:
+        if departement in departements["Toute la France/Régions"]:
+            pass
+        else:
+            return redirect("application:index")
+    
+    if cate:
+        if cate in cat_names:
+            pass
+        else:
+            return redirect("application:index")
+    
+
     # the search bar needs the position of a departement in the scroll menu,
     # to reposition it as it was before the submit click
     departement_choice_position = 0
     if region:
         departement_choice_position = departements[region].index(departement)
+    
 
     # funtion that returns users accordingly to selected fields
     users = filter_results(region, departement, cate, service_choice)

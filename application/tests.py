@@ -195,3 +195,52 @@ class FilterResultsTest(TestCase):
         # Test with 'haute corse' and 'Travail' selected should return no users
         response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Haute-Corse', 'category':'Travail'})
         self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_region_departement_and_category(self):
+        #Should return 1 user
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Haute-Savoie', 'category':'Maison'})
+        self.assertEqual(response.context[0]['nb_users'], 1)
+
+        #Should return no users
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Haute-Savoie', 'category':'Bricolage'})
+        self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_category_and_service(self):
+        #Sould return 1 user
+        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Tous les départements', 'category':'Cours', 'service':'Informatique'})
+        self.assertEqual(response.context[0]['nb_users'], 1)
+        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+
+        #Sould return 0 users
+        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Tous les départements', 'category':'Travail', 'service':'Traduction'})
+        self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_departement_category_and_service(self):
+        #Sould return 1 user
+        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Savoie', 'category':'Cours', 'service':'Informatique'})
+        self.assertEqual(response.context[0]['nb_users'], 1)
+        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+
+        #Sould return 0 users
+        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Savoie', 'category':'Travail', 'service':'Traduction'})
+        self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_region_departement_category_and_service(self):
+        #Sould return 1 user
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Savoie', 'category':'Maison', 'service':'Informatique'})
+        self.assertEqual(response.context[0]['nb_users'], 1)
+        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+
+        #Sould return 0 users
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Savoie', 'category':'Travail', 'service':'Traduction'})
+        self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_region_category_service(self):
+        #Should return 1 user
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Cours', 'service':'Informatique'})
+        self.assertEqual(response.context[0]['nb_users'], 1)
+        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+
+        #Should return 0 users
+        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Bricolage', 'service':'Peinture'})
+        self.assertEqual(response.context[0]['nb_users'], 0)
