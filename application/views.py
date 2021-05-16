@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from useraccount.models import User, Category, Services
-from .departements_list import departements
+from .departements_list import DEPARTEMENTS as departements
 from .search_extend import filter_results, counting_users
+from useraccount.services import SERVICES_DICT
 
 
 def index(request):
@@ -38,25 +39,26 @@ def search_results(request):
         cat_names.append(cat.name)
 
     #conditional block to secure search bar inputs
-    if region:
-        if region in departements:
-            pass
-        else:
-            return redirect("application:index")
-    
-    if departement:
-        if departement in departements["Toute la France/Régions"]:
-            pass
-        else:
-            return redirect("application:index")
-    
-    if cate:
-        if cate in cat_names:
-            pass
-        else:
-            return redirect("application:index")
-    
+    if region and region not in departements:
+        return redirect("application:index")
+            
+    if departement and departement not in departements["Toute la France/Régions"]:
+        return redirect("application:index")
+            
+    if cate and cate not in cat_names:
+        return redirect("application:index")
 
+    if not cate and service_choice:
+        return redirect("application:index")
+    
+    if service_choice:
+        # Making a list of all services
+        services_list = []
+        for services_list_per_cat in SERVICES_DICT.values():
+            services_list += services_list_per_cat
+        if service_choice not in services_list:
+            return redirect("application:index")
+    
     # the search bar needs the position of a departement in the scroll menu,
     # to reposition it as it was before the submit click
     departement_choice_position = 0

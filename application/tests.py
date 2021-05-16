@@ -1,7 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 from django.urls import reverse
 from useraccount.models import User, Services, Category
-from useraccount.services import SERVICES_DICT
+from useraccount.services import SERVICES_DICT as services_dict
+from selenium import webdriver
+from pathlib import Path
 
 
 class IndexPageTest(TestCase):
@@ -69,7 +71,6 @@ class FilterResultsTest(TestCase):
         fake_user.save()
 
         # Populate categories
-        services_dict = SERVICES_DICT
         for category in services_dict:
             cat = Category(name=category)
             cat.save()
@@ -244,3 +245,36 @@ class FilterResultsTest(TestCase):
         #Should return 0 users
         response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Bricolage', 'service':'Peinture'})
         self.assertEqual(response.context[0]['nb_users'], 0)
+
+    def test_only_service_selected(self):
+        #Should redirect to home page
+        response = self.client.get("/search_results", {'service':'Assistance'})
+        self.assertEqual(response.status_code, 302)
+
+    def test_wrong_input(self):
+        #A wrong input in search bar fields should redirect user to homepage
+        response = self.client.get("/search_results", {'region':'Auves-Alpes','departement':'Tous lestements', 'category':'Cour', 'service':'Informatique'})
+        self.assertEqual(response.status_code, 302)
+
+class Hosttest(LiveServerTestCase):
+    '''Browser tests'''
+    def setUp(self):
+
+        #Path to Chrome browser, for Selenium
+        BASE_DIR = Path(__file__).resolve().parent.parent
+
+        PATH = str(BASE_DIR/'webdrivers'/'chromedriver')
+        self.browser = webdriver.Chrome(PATH)
+
+    def test_home_page(self):
+        self.browser.get(self.live_server_url)
+
+        assert 'Partagez, échangez' in self.browser.title
+
+    def test_home_page(self):
+        self.browser.get('http://127.0.0.1:8000/search_results')
+
+        assert 'Partagez, échangez' in self.browser.title
+
+    def tearDown(self):
+        self.browser.close()

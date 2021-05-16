@@ -1,6 +1,6 @@
 """Extention of search_results view"""
 from useraccount.models import User, Category, Services
-from .departements_list import departements, departements_number
+from .departements_list import DEPARTEMENTS as departements, DEPARTEMENTS_NUMBER as departements_number
 
 
 def filter_results(region, departement, category, service):
@@ -237,7 +237,7 @@ def counting_users(region, departement):
                 services_dict[category.name] = services_count
 
     if region and not departement:
-        # just fetching all departement numbers in this region
+        # fetching all departement numbers in this region
         departements_in_region = departements[region]
         departements_number_in_region = []
         for departement_name in departements_in_region:

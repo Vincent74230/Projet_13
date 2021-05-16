@@ -1,6 +1,6 @@
 """file contains region and departement dict"""
 
-departements = {
+DEPARTEMENTS = {
     "Toute la France/Régions": [
         "Tous les départements",
         "Ain",
@@ -247,7 +247,7 @@ departements = {
 }
 
 
-departements_number = {
+DEPARTEMENTS_NUMBER = {
     "Ain": "01",
     "Aisne": "02",
     "Allier": "03",
