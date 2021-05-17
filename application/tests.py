@@ -3,70 +3,75 @@ from django.urls import reverse
 from useraccount.models import User, Services, Category
 from useraccount.services import SERVICES_DICT as services_dict
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
 from pathlib import Path
 
 
 class IndexPageTest(TestCase):
     """Tests of main page display"""
+
     def test_index_page_display(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
 
+
 class FilterResultsTest(TestCase):
     """Tests of search_results view"""
+
     def setUp(self):
         fake_user = User.objects.create_user(
-        username="VincentTest1",
-        password="Testpassword1",
-        first_name="Vincent",
-        last_name="VinceNow",
-        email="vince1@gmail.com",
-        gender=True,
-        postcode='73000',
-        )
-        fake_user.save()
-    
-        fake_user = User.objects.create_user(
-        username="VincentTest2",
-        password="Testpassword2",
-        first_name="Jules",
-        last_name="Nono",
-        email="vince2@gmail.com",
-        gender=True,
-        postcode='74230',
+            username="VincentTest1",
+            password="Testpassword1",
+            first_name="Vincent",
+            last_name="VinceNow",
+            email="vince1@gmail.com",
+            gender=True,
+            postcode="73000",
         )
         fake_user.save()
 
         fake_user = User.objects.create_user(
-        username="AliceTest1",
-        password="Testpassword3",
-        first_name="Alice",
-        last_name="Wonderland",
-        email="alice@gmail.com",
-        gender=False,
-        postcode='44000',
+            username="VincentTest2",
+            password="Testpassword2",
+            first_name="Jules",
+            last_name="Nono",
+            email="vince2@gmail.com",
+            gender=True,
+            postcode="74230",
         )
         fake_user.save()
 
         fake_user = User.objects.create_user(
-        username="Cicolini",
-        password="Testpassword3",
-        first_name="Giorgio",
-        last_name="Giorgissimo",
-        email="cico@gmail.com",
-        gender=True,
-        postcode='20090',
+            username="AliceTest1",
+            password="Testpassword3",
+            first_name="Alice",
+            last_name="Wonderland",
+            email="alice@gmail.com",
+            gender=False,
+            postcode="44000",
         )
         fake_user.save()
 
         fake_user = User.objects.create_user(
-        username="runner974",
-        password="Testpassword3",
-        first_name="Tim",
-        last_name="Hoaro",
-        email="timy@gmail.com",
-        gender=True,
-        postcode='97400',
+            username="Cicolini",
+            password="Testpassword3",
+            first_name="Giorgio",
+            last_name="Giorgissimo",
+            email="cico@gmail.com",
+            gender=True,
+            postcode="20090",
+        )
+        fake_user.save()
+
+        fake_user = User.objects.create_user(
+            username="runner974",
+            password="Testpassword3",
+            first_name="Tim",
+            last_name="Hoaro",
+            email="timy@gmail.com",
+            gender=True,
+            postcode="97400",
         )
         fake_user.save()
 
@@ -84,16 +89,16 @@ class FilterResultsTest(TestCase):
                 service_query.save()
 
         # Associating fake users with proposed & required services
-        informatique_query = Services.objects.get(name='Informatique')
-        petites_reparations_query = Services.objects.get(name='Petites réparations')
-        jardinage_query = Services.objects.get(name='Jardinage')
-        comptabilité_query = Services.objects.get(name='Comptabilité')
-        langues_query = Services.objects.get(name='Langues étrangères')
-        electricité_query = Services.objects.get(name='Electricité')
-        maconnerie_query = Services.objects.get(name='Maçonnerie')
-        coaching_query = Services.objects.get(name='Coaching')
-        peinture_query = Services.objects.get(name='Peinture')
-        ameublement_query = Services.objects.get(name='Ameublement')
+        informatique_query = Services.objects.get(name="Informatique")
+        petites_reparations_query = Services.objects.get(name="Petites réparations")
+        jardinage_query = Services.objects.get(name="Jardinage")
+        comptabilité_query = Services.objects.get(name="Comptabilité")
+        langues_query = Services.objects.get(name="Langues étrangères")
+        electricité_query = Services.objects.get(name="Electricité")
+        maconnerie_query = Services.objects.get(name="Maçonnerie")
+        coaching_query = Services.objects.get(name="Coaching")
+        peinture_query = Services.objects.get(name="Peinture")
+        ameublement_query = Services.objects.get(name="Ameublement")
 
         users = User.objects.all()
 
@@ -108,173 +113,332 @@ class FilterResultsTest(TestCase):
         users[4].proposed_services.add(peinture_query)
         users[4].proposed_services.add(ameublement_query)
 
-
     def test_region_and_departement_parameters_response(self):
         response = self.client.get("/search_results")
         self.assertEqual(response.status_code, 200)
 
         # checking total users returned by view
-        self.assertEqual(response.context[0]['total_nb_users'], 5)
+        self.assertEqual(response.context[0]["total_nb_users"], 5)
 
         # checking users returned by view with default params
-        self.assertEqual(response.context[0]['nb_users'], 5)
+        self.assertEqual(response.context[0]["nb_users"], 5)
 
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements'})
+        response = self.client.get(
+            "/search_results",
+            {"region": "Auvergne-Rhônes-Alpes", "departement": "Tous les départements"},
+        )
 
-        #in 'Auvergne-Rhônes-Alpes', there must be only 2 users (1 and 2)
-        self.assertEqual(len(response.context[0]['users_info']), 2)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
-        self.assertEqual(response.context[0]['users_info'][1]['username'], 'VincentTest2')
+        # in 'Auvergne-Rhônes-Alpes', there must be only 2 users (1 and 2)
+        self.assertEqual(len(response.context[0]["users_info"]), 2)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
+        self.assertEqual(
+            response.context[0]["users_info"][1]["username"], "VincentTest2"
+        )
 
-        response = self.client.get("/search_results", {'region':'Bretagne','departement':'Tous les départements'})
+        response = self.client.get(
+            "/search_results",
+            {"region": "Bretagne", "departement": "Tous les départements"},
+        )
 
-        #In this case, no users should be teturned
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # In this case, no users should be teturned
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
-        response = self.client.get("/search_results", {'region':'Pays de la Loire','departement':'Tous les départements'})
+        response = self.client.get(
+            "/search_results",
+            {"region": "Pays de la Loire", "departement": "Tous les départements"},
+        )
 
-        #Only user3 should be in this case
-        self.assertEqual(len(response.context[0]['users_info']), 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'AliceTest1')
+        # Only user3 should be in this case
+        self.assertEqual(len(response.context[0]["users_info"]), 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "AliceTest1")
 
-        #There must be only one user in this departements : Haute-savoie
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Haute-Savoie'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
+        # There must be only one user in this departements : Haute-savoie
+        response = self.client.get(
+            "/search_results",
+            {"region": "Toute la France/Régions", "departement": "Haute-Savoie"},
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
 
-        #There must be only one user in this region : Corse
-        response = self.client.get("/search_results", {'region':'Corse','departement':'Tous les départements'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'Cicolini')
+        # There must be only one user in this region : Corse
+        response = self.client.get(
+            "/search_results",
+            {"region": "Corse", "departement": "Tous les départements"},
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "Cicolini")
 
-        #There must be only one user in this departement : haute corse
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Haute-Corse'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
+        # There must be only one user in this departement : haute corse
+        response = self.client.get(
+            "/search_results",
+            {"region": "Toute la France/Régions", "departement": "Haute-Corse"},
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
 
-        #Still checking the numbers of total users with these parameters
-        self.assertEqual(response.context[0]['total_nb_users'], 5)
+        # Still checking the numbers of total users with these parameters
+        self.assertEqual(response.context[0]["total_nb_users"], 5)
 
-        #There must be only one user in this region : Réunion
-        response = self.client.get("/search_results", {'region':'Réunion','departement':'Tous les départements'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'runner974')
+        # There must be only one user in this region : Réunion
+        response = self.client.get(
+            "/search_results",
+            {"region": "Réunion", "departement": "Tous les départements"},
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "runner974")
 
-        #There must be only one user in this departement : Réunion
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'La Réunion'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'runner974')
+        # There must be only one user in this departement : Réunion
+        response = self.client.get(
+            "/search_results",
+            {"region": "Toute la France/Régions", "departement": "La Réunion"},
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "runner974")
 
         #'region' and 'departement' selected
-        response = self.client.get("/search_results", {'region':'Corse','departement':'Haute-Corse'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'Cicolini')
+        response = self.client.get(
+            "/search_results", {"region": "Corse", "departement": "Haute-Corse"}
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "Cicolini")
 
     def test_only_category_response(self):
-        #Testing only with one category parameter
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Tous les départements', 'category':'Cours'})
+        # Testing only with one category parameter
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Tous les départements",
+                "category": "Cours",
+            },
+        )
 
-        #There must be 3 users with those params
-        self.assertEqual(response.context[0]['nb_users'], 3)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
-        self.assertEqual(response.context[0]['users_info'][1]['username'], 'AliceTest1')
-        self.assertEqual(response.context[0]['users_info'][2]['username'], 'Cicolini')
-
+        # There must be 3 users with those params
+        self.assertEqual(response.context[0]["nb_users"], 3)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
+        self.assertEqual(response.context[0]["users_info"][1]["username"], "AliceTest1")
+        self.assertEqual(response.context[0]["users_info"][2]["username"], "Cicolini")
 
     def test_region_and_category(self):
-        #Test with 'Auvergne Rhônes Alpes as region and Travail'
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Cours'})
+        # Test with 'Auvergne Rhônes Alpes as region and Travail'
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Tous les départements",
+                "category": "Cours",
+            },
+        )
 
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
 
     def test_departement_and_category(self):
-        #Test with 'haute corse', 'Bricolage' selected should return 1 user
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Haute-Corse', 'category':'Bricolage'})
+        # Test with 'haute corse', 'Bricolage' selected should return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Haute-Corse",
+                "category": "Bricolage",
+            },
+        )
 
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'Cicolini')
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(response.context[0]["users_info"][0]["username"], "Cicolini")
 
         # Test with 'haute corse' and 'Travail' selected should return no users
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Haute-Corse', 'category':'Travail'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Haute-Corse",
+                "category": "Travail",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_region_departement_and_category(self):
-        #Should return 1 user
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Haute-Savoie', 'category':'Maison'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
+        # Should return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Haute-Savoie",
+                "category": "Maison",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
 
-        #Should return no users
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Haute-Savoie', 'category':'Bricolage'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # Should return no users
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Haute-Savoie",
+                "category": "Bricolage",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_category_and_service(self):
-        #Sould return 1 user
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Tous les départements', 'category':'Cours', 'service':'Informatique'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+        # Sould return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Tous les départements",
+                "category": "Cours",
+                "service": "Informatique",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
 
-        #Sould return 0 users
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Tous les départements', 'category':'Travail', 'service':'Traduction'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # Sould return 0 users
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Tous les départements",
+                "category": "Travail",
+                "service": "Traduction",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_departement_category_and_service(self):
-        #Sould return 1 user
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Savoie', 'category':'Cours', 'service':'Informatique'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+        # Sould return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Savoie",
+                "category": "Cours",
+                "service": "Informatique",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
 
-        #Sould return 0 users
-        response = self.client.get("/search_results", {'region':'Toute la France/Régions','departement':'Savoie', 'category':'Travail', 'service':'Traduction'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # Sould return 0 users
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Toute la France/Régions",
+                "departement": "Savoie",
+                "category": "Travail",
+                "service": "Traduction",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_region_departement_category_and_service(self):
-        #Sould return 1 user
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Savoie', 'category':'Maison', 'service':'Informatique'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+        # Sould return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Savoie",
+                "category": "Maison",
+                "service": "Informatique",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
 
-        #Sould return 0 users
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Savoie', 'category':'Travail', 'service':'Traduction'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # Sould return 0 users
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Savoie",
+                "category": "Travail",
+                "service": "Traduction",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_region_category_service(self):
-        #Should return 1 user
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Cours', 'service':'Informatique'})
-        self.assertEqual(response.context[0]['nb_users'], 1)
-        self.assertEqual(response.context[0]['users_info'][0]['username'], 'VincentTest1')
+        # Should return 1 user
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Tous les départements",
+                "category": "Cours",
+                "service": "Informatique",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 1)
+        self.assertEqual(
+            response.context[0]["users_info"][0]["username"], "VincentTest1"
+        )
 
-        #Should return 0 users
-        response = self.client.get("/search_results", {'region':'Auvergne-Rhônes-Alpes','departement':'Tous les départements', 'category':'Bricolage', 'service':'Peinture'})
-        self.assertEqual(response.context[0]['nb_users'], 0)
+        # Should return 0 users
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auvergne-Rhônes-Alpes",
+                "departement": "Tous les départements",
+                "category": "Bricolage",
+                "service": "Peinture",
+            },
+        )
+        self.assertEqual(response.context[0]["nb_users"], 0)
 
     def test_only_service_selected(self):
-        #Should redirect to home page
-        response = self.client.get("/search_results", {'service':'Assistance'})
+        # Should redirect to home page
+        response = self.client.get("/search_results", {"service": "Assistance"})
         self.assertEqual(response.status_code, 302)
 
     def test_wrong_input(self):
-        #A wrong input in search bar fields should redirect user to homepage
-        response = self.client.get("/search_results", {'region':'Auves-Alpes','departement':'Tous lestements', 'category':'Cour', 'service':'Informatique'})
+        # A wrong input in search bar fields should redirect user to homepage
+        response = self.client.get(
+            "/search_results",
+            {
+                "region": "Auves-Alpes",
+                "departement": "Tous lestements",
+                "category": "Cour",
+                "service": "Informatique",
+            },
+        )
         self.assertEqual(response.status_code, 302)
 
+
 class Hosttest(LiveServerTestCase):
-    '''Browser tests'''
+    """Browser tests"""
+
     def setUp(self):
-
-        #Path to Chrome browser, for Selenium
         BASE_DIR = Path(__file__).resolve().parent.parent
-
-        PATH = str(BASE_DIR/'webdrivers'/'chromedriver')
-        self.browser = webdriver.Chrome(PATH)
-
-    def test_home_page(self):
-        self.browser.get(self.live_server_url)
-
-        assert 'Partagez, échangez' in self.browser.title
+        PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
+        self.driver = webdriver.Chrome(PATH)
+        self.driver.get("http://127.0.0.1:8000")
 
     def test_home_page(self):
-        self.browser.get('http://127.0.0.1:8000/search_results')
+        #Testing home page display
+        self.assertEqual("Partagez, échangez", self.driver.title)
 
-        assert 'Partagez, échangez' in self.browser.title
+    def test_search_bar(self):
+        #test if selected fields leads to search_page, and good response
+        region_menu = self.driver.find_element_by_id("region-menu")
+        rechercher_btn = self.driver.find_element_by_id("rechercher-btn")
+        drp = Select(region_menu)
+        drp.select_by_visible_text("Toute la France/Régions")
+        rechercher_btn.send_keys(Keys.RETURN)
+        all_users = self.driver.find_elements_by_class_name("services-menu")
+
+        self.assertEqual(len(all_users), 100)
 
     def tearDown(self):
-        self.browser.close()
+        self.driver.close()
