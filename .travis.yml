@@ -8,7 +8,6 @@ addons:
 before_script:
   - pip install -r requirements.txt
   - install-webdrivers --path webdrivers
-  - python manage.py fakedata
 
 branches:
   only:
@@ -20,4 +19,5 @@ services:
   - postgresql
 
 script:
+  - python manage.py fakedata
   - python manage.py test
