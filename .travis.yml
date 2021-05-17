@@ -1,0 +1,23 @@
+language: python
+python:
+  - '3.8.5'
+
+addons:
+  chrome: stable
+
+before_script:
+  - pip install -r requirements.txt
+  - install-webdrivers --path webdrivers
+  - python3 manage.py fakedata
+
+branches:
+  only:
+    - master
+
+env: DJANGO_SETTINGS_MODULE='peopleskills.travis', SECRET_KEY="fi&qr@=_bhwt!k8sp"
+
+services:
+  - postgresql
+
+script:
+  - python manage.py test
