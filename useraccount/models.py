@@ -2,6 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class User(AbstractUser):
@@ -11,9 +13,10 @@ class User(AbstractUser):
     postcode = models.CharField(max_length=5)
     verified_status = models.BooleanField(default=False)
     gender = models.BooleanField(default=True)
+    email_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 
 class Rating(models.Model):
@@ -82,3 +85,4 @@ class Services(models.Model):
 
     def __str__(self):
         return str(self.name)
+

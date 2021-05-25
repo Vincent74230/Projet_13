@@ -432,11 +432,11 @@ class Hosttest(LiveServerTestCase):
         self.driver.get("http://127.0.0.1:8000")
 
     def test_home_page(self):
-        #Testing home page display
+        '''Testing home page display'''
         self.assertEqual("Partagez, échangez", self.driver.title)
 
     def test_search_bar(self):
-        #test if selected fields leads to search_page, and good response
+        """test if selected fields leads to search_page, and good response"""
         region_menu = self.driver.find_element_by_id("region-menu")
         rechercher_btn = self.driver.find_element_by_id("rechercher-btn")
         drp = Select(region_menu)
