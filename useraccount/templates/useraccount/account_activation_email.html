@@ -1,8 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    </head>
+    <body>
+    <section>
+    <div>
+        <p>Bonjour {{ user.username }},</p>
 
-{% autoescape off %}
-Bonjour {{ user.username }},
+        <p>Please click on the link below to confirm your registration:</p>
 
-Cliquez sur le lien ci-dessous pour activer votre compte.
-
-http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}
-{% endautoescape %}
+        http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}
+      <div>
+        <p>Voici la liste de vos produits favoris:<br></p><br>
+      </div>
+    </div>
+    </section>
+    <footer>
+      <p>A bientôt sur peopleskills</p>
+    </footer>
+    </body>
+</html>

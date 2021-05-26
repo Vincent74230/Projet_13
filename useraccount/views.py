@@ -12,7 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import authenticate, login
 from django.utils.encoding import force_text
 from django.urls import reverse
-
+from django.core.mail import send_mail
 
 
 class Index(View):
@@ -32,15 +32,20 @@ class Index(View):
             user.is_active = False # Deactivate account till it is confirmed
             user.save()
             current_site = get_current_site(request)
-            subject = 'Activate Your MySite Account'
-            message = render_to_string('useraccount/account_activation_email.html', {
+            msg_html = render_to_string('useraccount/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
-            messages.success(request, ('Please Confirm your email to complete registration.'))
+            send_mail(
+                "Bonjour {}, c'est PeopleSkills".format(user.username),
+                "Ceci est un message très important",
+                "vincent.nowak@hotmail.fr",
+                [user.email],
+                html_message=msg_html,
+            )
+            messages.success(request, ('Activez votre compte en cliquant sur le lien envoyé dans votre boite mail'))
 
             return redirect(reverse('useraccount:login'))
 
