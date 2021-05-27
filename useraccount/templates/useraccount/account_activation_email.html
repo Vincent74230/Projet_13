@@ -12,7 +12,7 @@
 
         <p>Please click on the link below to confirm your registration:</p>
 
-        http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}
+        <a href="http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}">http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}</a>
       <div>
         <p>Voici la liste de vos produits favoris:<br></p><br>
       </div>
