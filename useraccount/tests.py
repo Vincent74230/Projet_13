@@ -1,91 +1,57 @@
 """Tests of useraccount application"""
 import os
 from django.test import LiveServerTestCase
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver import Chrome
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
+from pathlib import Path
+from .models import User
+from django.core import mail
 
 
-class ClasseDuTest(LiveServerTestCase):
-    fixtures = [] # à remplir au besoin
+class UseraccountLiveTest(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.browser = Chrome()
-        cls.browser.implicitly_wait(10)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.browser.quit()
-        super().tearDownClass()
-
-    def test_nom_du_test(self):
-        """
-            La docstring expliquant le but du test et la User Story
-        """
-        self.browser.get(os.path.join(self.live_server_url, 'http://127.0.0.1:8000'))
-        self.assertEqual("Partagez, échangez", self.browser.title)
-
-
-
-
-
-
-'''
-from pathlib import Path
-from django.test import TestCase, LiveServerTestCase
-from django.urls import reverse
-from selenium import webdriver
-from .models import User
-
-
-class TestRegistrationAndEmailValidation(LiveServerTestCase):
-    """Live test of new user registration and email validation """
-
-    def setUp(self):
         BASE_DIR = Path(__file__).resolve().parent.parent
         PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
-
-        #Options for chrome testing:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('window-size=1920x1080')
+        cls.driver = webdriver.Chrome((PATH), options=chrome_options)
+        cls.driver.get('%s%s' % (cls.live_server_url, '/useraccount/'))
+        cls.driver.implicitly_wait(5)
 
-        self.driver = webdriver.Chrome((PATH), options=chrome_options)
-        self.driver.get("http://127.0.0.1:8000")
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
 
-    def test_useraccount_title_page(self):
-        """Testing useraccount_page_display"""
+    def test_useraccount_display(self):
+        """see if page displays ok"""
         self.assertEqual("Partagez, échangez", self.driver.title)
 
-    def tearDown(self):
-        self.driver.close()
+    def test_useraccount_post(self):
+        """Tests user registration and email checking"""
+        username = self.driver.find_element_by_id("id_username")
+        postcode = self.driver.find_element_by_id("id_postcode")
+        email = self.driver.find_element_by_id("id_email")
+        password1 = self.driver.find_element_by_id("id_password1")
+        password2 = self.driver.find_element_by_id("id_password2")
+        submit = self.driver.find_element_by_name("create_user")
+        username.send_keys('testuserselenium1')
+        postcode.send_keys('74230')
+        email.send_keys('testuser1@gmail.fr')
+        password1.send_keys('DellInspirion1!')
+        password2.send_keys('DellInspirion1!')
+        submit.send_keys(Keys.RETURN)
 
+        user = User.objects.all()
 
-
-class SignUpTest(TestCase):
-    """Sign up page tests"""
-
-    def test_sign_up_page(self):
-        response = self.client.get("/useraccount/")
-        self.assertEqual(response.status_code, 200)
-
-
-    def test_sign_in_post(self):
-        """Tests if usercreationform is ok"""
-        response = self.client.post(reverse('useraccount:index'),
-            {
-                "username": "Vincent74",
-                "email": "vince@gmail.com",
-                "password1": "DellInspirion1!",
-                "password2": "DellInspirion1!",
-                "postcode":"74230",
-            },
-        )
-
-        self.assertRedirects(response, '/useraccount/login', status_code=302, target_status_code=200)
-
-        users = User.objects.all()
-        self.assertEqual (len(users), 1)
-        self.assertEqual(users[0].username, 'Vincent74')
-'''
+        self.assertEqual(len(user), 1)
+        self.assertEqual(user[0].username, 'testuserselenium1')
+        self.assertEqual(user[0].verified_status, False)
+        self.assertEqual(user[0].email_confirmed, False)
+        self.assertEqual(user[0].is_active, False)
+        self.assertEqual(len(mail.outbox), 1)

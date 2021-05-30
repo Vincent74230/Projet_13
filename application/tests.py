@@ -419,17 +419,23 @@ class FilterResultsTest(TestCase):
 class Hosttest(LiveServerTestCase):
     """Browser tests"""
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         BASE_DIR = Path(__file__).resolve().parent.parent
         PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
-
-        #Options for chrome testing:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('window-size=1920x1080')
 
-        self.driver = webdriver.Chrome((PATH), options=chrome_options)
-        self.driver.get("http://127.0.0.1:8000")
+        cls.driver = webdriver.Chrome((PATH), options=chrome_options)
+        cls.driver.get(cls.live_server_url)
+        cls.driver.implicitly_wait(5)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
 
     def test_home_page(self):
         '''Testing home page display'''
@@ -444,7 +450,4 @@ class Hosttest(LiveServerTestCase):
         rechercher_btn.send_keys(Keys.RETURN)
         all_users = self.driver.find_elements_by_class_name("services-menu")
 
-        self.assertEqual(len(all_users), 100)
-
-    def tearDown(self):
-        self.driver.close()
+        self.assertEqual(len(all_users), 0)
