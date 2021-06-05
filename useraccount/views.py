@@ -9,10 +9,11 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.utils.encoding import force_text
 from django.urls import reverse
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 
 class Index(View):
@@ -88,3 +89,9 @@ class ActivateAccount(View):
         else:
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('/')
+
+@login_required
+def log_out(request):
+    """Logout function, login required"""
+    logout(request)
+    return redirect("login")

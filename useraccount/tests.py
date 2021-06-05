@@ -55,3 +55,6 @@ class UseraccountLiveTest(LiveServerTestCase):
         self.assertEqual(user[0].email_confirmed, False)
         self.assertEqual(user[0].is_active, False)
         self.assertEqual(len(mail.outbox), 1)
+        html_content = mail.outbox[0].alternatives[0][0]
+        self.assertTrue("testuserselenium1" in html_content)
+        print (mail.outbox[0].alternatives[0][0])
