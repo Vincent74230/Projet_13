@@ -1,5 +1,6 @@
 """Tests of useraccount application"""
 import os
+import re
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -57,4 +58,28 @@ class UseraccountLiveTest(LiveServerTestCase):
         self.assertEqual(len(mail.outbox), 1)
         html_content = mail.outbox[0].alternatives[0][0]
         self.assertTrue("testuserselenium1" in html_content)
-        print (mail.outbox[0].alternatives[0][0])
+
+        message_html = mail.outbox[0].alternatives[0][0]
+
+        regex = r"(?i)\b((?:http?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+        url = re.findall(regex,message_html)
+        print (url)
+
+class UserLoginLogoutTest(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('window-size=1920x1080')
+        cls.driver = webdriver.Chrome((PATH), options=chrome_options)
+        cls.driver.get('%s%s' % (cls.live_server_url, '/useraccount/'))
+        cls.driver.implicitly_wait(5)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()

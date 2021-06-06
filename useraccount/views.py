@@ -41,7 +41,7 @@ class Index(View):
             })
             send_mail(
                 "Bonjour {}, c'est PeopleSkills".format(user.username),
-                "Ceci est un message très important",
+                "Ceci est un message de PeopleSkills",
                 "vincent.nowak@hotmail.fr",
                 [user.email],
                 html_message=msg_html,
@@ -94,4 +94,4 @@ class ActivateAccount(View):
 def log_out(request):
     """Logout function, login required"""
     logout(request)
-    return redirect("login")
+    return redirect("/")

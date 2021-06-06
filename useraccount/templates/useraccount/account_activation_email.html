@@ -10,9 +10,9 @@
     <div>
         <p>Bonjour {{ user.username }},</p>
 
-        <p>Veuillez cliquer sur le lien ci-dessous pour confirmaer votre addresse mail:</p>
+        <p>Veuillez cliquer sur le lien ci-dessous pour confirmer votre addresse mail:</p>
 
-        <a href="http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}">http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}</a>
+        <a href="http://{{ domain }}{% url 'useraccount:activate' uidb64=uid token=token %}">Je confirme mon adresse mail</a>
     </div>
     </section>
     <footer>
