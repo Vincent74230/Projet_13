@@ -11,9 +11,7 @@ from bs4 import BeautifulSoup
 
 
 class UseraccountLiveTest(LiveServerTestCase):
-    """tests sign in, email confirmation, logout
-    not login beacause user is implicitly logged in when
-    clicked on the email link"""
+    """tests sign in, email confirmation, login, logout"""
 
     @classmethod
     def setUpClass(cls):
@@ -21,11 +19,11 @@ class UseraccountLiveTest(LiveServerTestCase):
         BASE_DIR = Path(__file__).resolve().parent.parent
         PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
         chrome_options = webdriver.ChromeOptions()
-        #chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("window-size=1920x1080")
         cls.driver = webdriver.Chrome((PATH), options=chrome_options)
         cls.driver.get("%s%s" % (cls.live_server_url, "/useraccount/"))
-        cls.driver.implicitly_wait(3)
+        cls.driver.implicitly_wait(5)
 
     @classmethod
     def tearDownClass(cls):
@@ -74,11 +72,43 @@ class UseraccountLiveTest(LiveServerTestCase):
         clickable_link = link_list[0]
         clickable_link = str(clickable_link)
 
-        #User is 'clicking' on the link
-        self.driver.get(clickable_link)
-        self.driver.implicitly_wait(1)
-
+        #User is trying to connect without having confirmed email
         user = User.objects.all()
+        username_on_login_page = self.driver.find_element_by_name('username')
+        password_on_login_page = self.driver.find_element_by_name('password')
+        username_on_login_page.send_keys("testuserselenium1")
+        password_on_login_page.send_keys("DellInspirion1!")
+        self.assertEqual(user[0].email_confirmed, False)
+        self.assertEqual(user[0].is_active, False)
 
+        #User is 'clicking' on the link of his mail box
+        self.driver.get(clickable_link)
+        user = User.objects.all()
         self.assertEqual(user[0].email_confirmed, True)
         self.assertEqual(user[0].is_active, True)
+
+        #User disconnects
+        log_out = self.driver.find_element_by_id('deconnexion')
+        log_out.send_keys(Keys.RETURN)
+
+        #Connects with wrong password
+        log_in = self.driver.find_element_by_id('connexion')
+        log_in.send_keys(Keys.RETURN)
+        username_on_login_page = self.driver.find_element_by_name('username')
+        password_on_login_page = self.driver.find_element_by_name('password')
+        username_on_login_page.send_keys("testuserselenium1")
+        password_on_login_page.send_keys("Dellzopfjizf")        
+        submit_btn = self.driver.find_element_by_id('login_btn')
+        submit_btn.send_keys(Keys.RETURN)
+        wrong_identifiers_message = self.driver.find_element_by_id('bad_identifiers').text
+        self.assertEqual(wrong_identifiers_message, "Votre nom d'utilisateur ou mot de passe est incorrect")
+
+        #Connects with right password
+        username_on_login_page = self.driver.find_element_by_name('username')
+        password_on_login_page = self.driver.find_element_by_name('password')
+        username_on_login_page.send_keys("testuserselenium1")
+        password_on_login_page.send_keys("DellInspirion1!")        
+        submit_btn = self.driver.find_element_by_id('login_btn')
+        submit_btn.send_keys(Keys.RETURN)
+        home_page_title = self.driver.find_element_by_tag_name('h2').text
+        self.assertEqual(home_page_title, 'SERVICES')
