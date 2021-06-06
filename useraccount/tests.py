@@ -1,6 +1,5 @@
 """Tests of useraccount application"""
 import os
-import re
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -8,9 +7,11 @@ from selenium.webdriver.common.keys import Keys
 from pathlib import Path
 from .models import User
 from django.core import mail
+from bs4 import BeautifulSoup
 
 
 class UseraccountLiveTest(LiveServerTestCase):
+    """tests sign in, eamil confirmation, login, logout"""
 
     @classmethod
     def setUpClass(cls):
@@ -18,7 +19,7 @@ class UseraccountLiveTest(LiveServerTestCase):
         BASE_DIR = Path(__file__).resolve().parent.parent
         PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
+        #chrome_options.add_argument('--headless')
         chrome_options.add_argument('window-size=1920x1080')
         cls.driver = webdriver.Chrome((PATH), options=chrome_options)
         cls.driver.get('%s%s' % (cls.live_server_url, '/useraccount/'))
@@ -61,25 +62,23 @@ class UseraccountLiveTest(LiveServerTestCase):
 
         message_html = mail.outbox[0].alternatives[0][0]
 
-        regex = r"(?i)\b((?:http?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-        url = re.findall(regex,message_html)
-        print (url)
+        message_html = str(message_html)
 
-class UserLoginLogoutTest(LiveServerTestCase):
+        soup = BeautifulSoup(message_html, 'html.parser')
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        PATH = str(BASE_DIR / "webdrivers" / "chromedriver")
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('window-size=1920x1080')
-        cls.driver = webdriver.Chrome((PATH), options=chrome_options)
-        cls.driver.get('%s%s' % (cls.live_server_url, '/useraccount/'))
-        cls.driver.implicitly_wait(5)
+        link_list = []
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
-        super().tearDownClass()
+        for a in soup.find_all('a', href=True):
+            link_list.append(a['href'])
+
+        clickable_link = link_list[0]
+        clickable_link = str(clickable_link)
+
+        print (clickable_link)
+        print ('something')
+
+        self.driver.get(clickable_link)
+
+
+        self.assertEqual(user[0].email_confirmed, True)
+
