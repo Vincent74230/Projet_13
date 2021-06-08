@@ -95,3 +95,6 @@ def log_out(request):
     """Logout function, login required"""
     logout(request)
     return redirect("/")
+
+def my_account(request):
+    return render(request, "useraccount/myaccount.html", {})
