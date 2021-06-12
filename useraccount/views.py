@@ -84,10 +84,10 @@ class ActivateAccount(View):
             user.email_confirmed = True
             user.save()
             login(request, user)
-            messages.success(request, ('Your account has been confirmed.'))
+            messages.success(request, ('Votre compte a été confirmé.'))
             return redirect('/')
         else:
-            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            messages.warning(request, ('Lien de confirmation invalide, peut-être a-t-il déjà été utilisé.'))
             return redirect('/')
 
 @login_required
@@ -96,5 +96,13 @@ def log_out(request):
     logout(request)
     return redirect("/")
 
+
+@login_required
 def my_account(request):
-    return render(request, "useraccount/myaccount.html", {})
+    """Manages user profile"""
+    choice = request.GET.get("choice")
+    print ('option choisie:{}'.format(choice))
+    if choice:
+        print ('option choisie:{}'.format(choice))
+        return render(request, 'useraccount/myaccount.html', {'choice':choice})
+    return render(request, "useraccount/myaccount.html", {'choice':'mon_profil'})

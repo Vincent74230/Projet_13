@@ -10530,3 +10530,54 @@ section#contact form#contactForm :-ms-input-placeholder {
   height: 40%;
   border-bottom: 1px solid black;
 }
+
+#account{
+  display: flex;
+  justify-content: center;
+}
+
+#account_options{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  width: 30%;
+  height: 600px;
+  margin: 10px;
+  padding : 10px;
+}
+
+#account_display{
+  display: flex;
+  flex-direction: column;
+  border-color: solid black;
+  width: 50%;
+  height: 600px;;
+  border: 1px solid black;
+  margin : 10px;
+  padding : 10px;
+}
+
+#user_avatar_and_username{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 300px;
+  border : 1px solid black;
+}
+
+#options{
+  display: flex;
+  flex-direction: column;
+  border : 1px solid black;
+  height: 100%;
+  margin: 12px;
+}
+
+.avatar{
+  height: 150px;
+  width: 150px;
+}
+
+.account_display_title{
+  border-bottom: 1px solid lightgrey;
+}

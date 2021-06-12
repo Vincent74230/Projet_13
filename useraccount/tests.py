@@ -87,6 +87,8 @@ class UseraccountLiveTest(LiveServerTestCase):
         self.assertEqual(user[0].email_confirmed, True)
         self.assertEqual(user[0].is_active, True)
 
+        #Before that : check if user is connected
+
         #User disconnects
         log_out = self.driver.find_element_by_id('deconnexion')
         log_out.send_keys(Keys.RETURN)

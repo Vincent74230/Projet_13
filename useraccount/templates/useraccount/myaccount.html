@@ -8,6 +8,39 @@
                 <div class="masthead-subheading">Proposez vos services ou biens, et recevez-en en échange!</div>
             </div>
     </header>   
-        <p>Ceci est la page mon compte</p>
+        <div id='account'>
+            <div id='account_options'>
+                <div id='user_avatar_and_username'>
+                    {% if request.user.gender %}
+                        <img class='avatar' src="{% static 'assets/img/avatar_m.svg' %}" alt=""/>
+                        <h4>Bonjour, {{request.user.username}}</h4>
+                    {% else %}
+                        <img class='avatar' src="{% static 'assets/img/avatar_f.svg' %}" alt=""/>
+                        <h4>Bonjour, {{request.user.username}}</h4>
+                    {% endif %}
+                </div>
+                <div id='options'>
+                    <a href="{% url 'useraccount:myaccount' %}?choice=mon_profil">Mon profil</a>
+                    <a href="{% url 'useraccount:myaccount' %}?choice=mes_identifiants">Mes identifiants</a>
+                    <a href="{% url 'useraccount:myaccount' %}?choice=mes_services">Mes services</a>
+                    <a href="{% url 'useraccount:myaccount' %}?choice=mes_avis">Mes avis</a>
+                    <a href="{% url 'useraccount:logout' %}">Déconnexion</a>
+                </div>
+            </div>
+            <div id='account_display'>
+                {% if choice == 'mon_profil' %}
+                <h3 class='account_display_title'>Mon profil</h3>
+                <form action = '' method = 'post'>
+                    
+                </form>
+                {% elif choice == 'mes_identifiants' %}
+                <h3 class='account_display_title'>Mes identifiants</h3>
+                {% elif choice == 'mes_services' %}
+                <h3 class='account_display_title'>Mes services</h3>
+                {% elif choice == 'mes_avis' %}
+                <h3 class='account_display_title'>Mes avis</h3>
+                {% endif %}
+            </div>
+        </div>
     </section>   
 {% endblock %}
