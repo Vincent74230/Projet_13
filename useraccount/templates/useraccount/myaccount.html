@@ -31,10 +31,23 @@
                 {% if choice == 'mon_profil' %}
                 <h3 class='account_display_title'>Mon profil</h3>
                 <form action = '' method = 'post'>
-                    
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    {% for message in messages %}
+                    <p>{{message}}</p>
+                    {% endfor %}
+                    <button type='submit'>Modifier</button>
                 </form>
                 {% elif choice == 'mes_identifiants' %}
                 <h3 class='account_display_title'>Mes identifiants</h3>
+                <form action = '' method = 'post'>
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    {% for message in messages %}
+                    <p>{{message}}</p>
+                    {% endfor %}
+                    <button type='submit'>Modifier</button>
+                </form>
                 {% elif choice == 'mes_services' %}
                 <h3 class='account_display_title'>Mes services</h3>
                 {% elif choice == 'mes_avis' %}

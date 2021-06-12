@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Category, User
-from .forms import CreateUserForm
+from .forms import CreateUserForm, ModifyUserProfile, ChangePassword
 from django.views.generic import View, UpdateView
 from application.departements_list import DEPARTEMENTS as departements
 from django.contrib import messages
@@ -101,8 +101,29 @@ def log_out(request):
 def my_account(request):
     """Manages user profile"""
     choice = request.GET.get("choice")
-    print ('option choisie:{}'.format(choice))
-    if choice:
-        print ('option choisie:{}'.format(choice))
+    form = ModifyUserProfile(instance=request.user)
+
+    if choice == 'mon_profil':
+        if request.method == 'POST':
+            form = ModifyUserProfile(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, ('Votre profil a bien été modifié'))
+                return render(request, 'useraccount/myaccount.html', {'choice':choice, 'form':form})
+        return render(request, 'useraccount/myaccount.html', {'choice':choice, 'form':form})
+
+    if choice == 'mes_identifiants':
+        if request.method == 'POST':
+            form = ChangePassword(data=request.POST, user=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, ('Votre mot de passe a bien été modifié'))
+                return render(request, 'useraccount/myaccount.html', {'choice':choice, 'form':form})
+        form = ChangePassword(user=request.user)
+        return render(request, 'useraccount/myaccount.html', {'choice':choice, 'form':form})
+    if choice == 'mes_services':
         return render(request, 'useraccount/myaccount.html', {'choice':choice})
-    return render(request, "useraccount/myaccount.html", {'choice':'mon_profil'})
+    if choice == 'mes_avis':
+        return render(request, 'useraccount/myaccount.html', {'choice':choice})
+
+    return render(request, "useraccount/myaccount.html", {'choice':'mon_profil', 'form':form})
