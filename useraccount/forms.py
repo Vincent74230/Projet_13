@@ -2,7 +2,8 @@ from django.contrib.auth.forms import (
     UserCreationForm, 
     UserChangeForm, 
     PasswordChangeForm)
-from .models import User
+from .models import User, Services
+from django.forms import ModelForm
 
 
 class CreateUserForm(UserCreationForm):

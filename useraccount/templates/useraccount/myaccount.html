@@ -50,6 +50,39 @@
                 </form>
                 {% elif choice == 'mes_services' %}
                 <h3 class='account_display_title'>Mes services</h3>
+                <form action = '' method = 'post'>
+                {% csrf_token %}
+                    
+                    {% for category, services in services_dict.items %}
+                    <h3>{{category}}</h3></br>
+                    {% for service in services %}
+                    <p>{{service}}</p>
+
+                    {% if user_required_services_name %}
+                        {% if service in user_required_services_name %}
+                            <p>Je recherche</p><input name='required' type='checkbox'value='{{service}}' checked />
+                        {% else %}
+                            <p>Je recherche</p><input name='required' type='checkbox'value='{{service}}'/>
+                        {% endif %}
+                    {% else %}
+                        <p>Je recherche</p><input name='required' type='checkbox'value='{{service}}'/>
+                    {% endif %}
+
+                    {% if user_proposed_services_name %}
+                        {% if service in user_proposed_services_name %}
+                            <p>Je propose</p><input name='proposed' type='checkbox'value='{{service}}' checked />
+                        {% else %}
+                            <p>Je propose</p><input name='proposed' type='checkbox'value='{{service}}'/>
+                        {% endif %}
+                    {% else %}
+                        <p>Je propose</p><input name='proposed' type='checkbox'value='{{service}}'/>
+                    {% endif %}
+
+                    {% endfor %}
+                    {% endfor %}
+                <input id="rechercher-btn" type="submit" value="Modifier mes services">
+                </form>
+
                 {% elif choice == 'mes_avis' %}
                 <h3 class='account_display_title'>Mes avis</h3>
                 {% endif %}

@@ -10579,5 +10579,8 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 .account_display_title{
+  display:flex;
+  justify-content: space-around;
   border-bottom: 1px solid lightgrey;
+  height: auto;
 }

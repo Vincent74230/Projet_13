@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Category, User
-from .forms import CreateUserForm, ModifyUserProfile, ChangePassword
+from .models import Category, User, Services
+from .forms import (
+    CreateUserForm, 
+    ModifyUserProfile, 
+    ChangePassword)
 from django.views.generic import View, UpdateView
 from application.departements_list import DEPARTEMENTS as departements
 from django.contrib import messages
@@ -14,6 +17,7 @@ from django.utils.encoding import force_text
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
+from .services import SERVICES_DICT as services_dict
 
 
 class Index(View):
@@ -122,7 +126,77 @@ def my_account(request):
         form = ChangePassword(user=request.user)
         return render(request, 'useraccount/myaccount.html', {'choice':choice, 'form':form})
     if choice == 'mes_services':
-        return render(request, 'useraccount/myaccount.html', {'choice':choice})
+        user = User.objects.get(username=request.user.username)
+
+        #Making simple list of all services
+        services_list = []
+        for category, services in services_dict.items():
+            for service in services:
+                services_list.append(service)
+
+        user_required_services_name = []
+        for element in user.required_services.all():
+            user_required_services_name.append(element.name)
+
+        user_proposed_services_name = []
+        for element in user.proposed_services.all():
+            user_proposed_services_name.append(element.name)
+
+        if request.method == 'POST':
+            #Grabing required services checked by user
+            checkboxes_required_services = request.POST.getlist('required')
+            if checkboxes_required_services:
+                for service in services_list:
+                    if service in checkboxes_required_services:
+                        service_query = Services.objects.get(name=service)
+                        user.required_services.add(service_query)
+                    else:
+                        service_query = Services.objects.get(name=service)
+                        user.required_services.remove(service_query)
+            else:
+                user_required_services = user.required_services.all()
+                if user_required_services:
+                    for required_service in user_required_services:
+                        service_query = Services.objects.get(name=required_service)
+                        user.required_services.remove(service_query)
+                else:
+                    pass
+
+            #Grabing proposed services checked by user
+            checkboxes_proposed_services = request.POST.getlist('proposed')
+            if checkboxes_proposed_services:
+                for service in services_list:
+                    if service in checkboxes_proposed_services:
+                        service_query = Services.objects.get(name=service)
+                        user.proposed_services.add(service_query)
+                    else:
+                        service_query = Services.objects.get(name=service)
+                        user.proposed_services.remove(service_query)
+            else:
+                user_proposed_services = user.proposed_services.all()
+                if user_proposed_services:
+                    for proposed_service in user_proposed_services:
+                        service_query = Services.objects.get(name=proposed_service)
+                        user.proposed_services.remove(service_query)
+                else:
+                    pass
+
+
+            user_required_services_name = []
+            for element in user.required_services.all():
+                user_required_services_name.append(element.name)
+
+            user_proposed_services_name = []
+            for element in user.proposed_services.all():
+                user_proposed_services_name.append(element.name)
+
+        context = {
+            'choice':choice,
+            'user_required_services_name':user_required_services_name,
+            'user_proposed_services_name':user_proposed_services_name,
+            'services_dict':services_dict,
+            }
+        return render(request, 'useraccount/myaccount.html', context)
     if choice == 'mes_avis':
         return render(request, 'useraccount/myaccount.html', {'choice':choice})
 
