@@ -103,7 +103,7 @@ def log_out(request):
 
 @login_required
 def my_account(request):
-    """Manages user profile"""
+    """Manages user profile : profile, my identifiers, my scores, """
     choice = request.GET.get("choice")
     form = ModifyUserProfile(instance=request.user)
 
@@ -134,10 +134,12 @@ def my_account(request):
             for service in services:
                 services_list.append(service)
 
+        #Making list of all users required services
         user_required_services_name = []
         for element in user.required_services.all():
             user_required_services_name.append(element.name)
 
+        #Making list of all proposed services
         user_proposed_services_name = []
         for element in user.proposed_services.all():
             user_proposed_services_name.append(element.name)
@@ -162,7 +164,7 @@ def my_account(request):
                 else:
                     pass
 
-            #Grabing proposed services checked by user
+            #Grabing proposed services checked by user from frontend
             checkboxes_proposed_services = request.POST.getlist('proposed')
             if checkboxes_proposed_services:
                 for service in services_list:
@@ -180,7 +182,6 @@ def my_account(request):
                         user.proposed_services.remove(service_query)
                 else:
                     pass
-
 
             user_required_services_name = []
             for element in user.required_services.all():
@@ -201,3 +202,9 @@ def my_account(request):
         return render(request, 'useraccount/myaccount.html', {'choice':choice})
 
     return render(request, "useraccount/myaccount.html", {'choice':'mon_profil', 'form':form})
+
+@login_required
+def score(request):
+    """Manages score system between two registered members"""
+    receiver = request.GET.get("receiver")
+    return render(request, "useraccount/score.html", {'receiver':receiver})

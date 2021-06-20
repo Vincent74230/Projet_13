@@ -78,11 +78,13 @@ def search_results(request):
     users_info = []
     for user in users:
         single_user_info = {}
+        single_user_info["pk"] = user.pk    
         single_user_info["username"] = user.username
         single_user_info["postcode"] = user.postcode
         single_user_info["gender"] = user.gender
         single_user_info["required_services"] = user.required_services.all()
         single_user_info["proposed_services"] = user.proposed_services.all()
+        single_user_info["email"] = user.email
         users_info.append(single_user_info)
 
     context = {

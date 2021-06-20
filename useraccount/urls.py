@@ -10,4 +10,5 @@ urlpatterns = [
     path("logout", views.log_out, name="logout"),
     path("activate/<uidb64>/<token>", ActivateAccount.as_view(), name='activate'),
     path("myaccount", views.my_account, name='myaccount'),
+    path("score", views.score, name='score'),
 ]
