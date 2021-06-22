@@ -10584,3 +10584,25 @@ section#contact form#contactForm :-ms-input-placeholder {
   border-bottom: 1px solid lightgrey;
   height: auto;
 }
+
+#test{
+  border: 1px solid black;
+}
+
+.checked{
+  color: red;
+}
+
+#first_star{
+  border: 1px solid black;
+}
+
+#stars{
+  display: flex;
+  justify-content: center;
+}
+
+.lone_star{
+  margin: 5px;
+  font-size: 2em;
+}

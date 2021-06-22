@@ -1,4 +1,4 @@
-{% extends 'base_layout.html' %}
+{% extends 'base_layout_rating.html' %}
 {% load static %}
 {% block content %}
         <!-- Masthead-->
@@ -17,5 +17,16 @@
                 </div>
             </div>
         </div>
-    </section>   
+        <form id="stars" action="" method="POST">
+            <button class='lone_star' id="first">p</button>
+            <button class='lone_star' id="second">p</button>
+            <button class='lone_star' id="third">p</button>
+            <button class='lone_star' id="fourth">p</button>
+            <button class='lone_star' id="fifth">p</button>
+        </form>
+        
+        </section>
+
+
+
 {% endblock %}
