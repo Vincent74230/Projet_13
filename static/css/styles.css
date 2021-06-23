@@ -10606,3 +10606,8 @@ section#contact form#contactForm :-ms-input-placeholder {
   margin: 5px;
   font-size: 2em;
 }
+
+.stars_btn{
+  background-color: inherit !important;
+  border: 0 !important;
+}

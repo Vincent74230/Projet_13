@@ -206,5 +206,8 @@ def my_account(request):
 @login_required
 def score(request):
     """Manages score system between two registered members"""
+    if request.method == 'POST':
+        sender_rating_choice = request.POST.get('rating_value')
+        print(sender_rating_choice)
     receiver = request.GET.get("receiver")
     return render(request, "useraccount/score.html", {'receiver':receiver})
