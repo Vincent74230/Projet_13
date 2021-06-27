@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Category, User, Services
+from .models import Category, User, Services, Rating
 from .forms import (
     CreateUserForm, 
     ModifyUserProfile, 
@@ -208,12 +208,29 @@ def my_account(request):
 def score(request):
     """Manages score system between two registered members"""
     receiver_username = request.GET.get("receiver")
+    receiver = User.objects.get(username= receiver_username)
     if request.method == 'POST':
         sender_rating_choice = request.POST.get('rating_value')
         receiver_username_email = (User.objects.get(username=receiver_username)).email
         registration = ScoreRegistration(receiver_username, sender_rating_choice, request.user)
-        registration.score_registration_verification()
-
+        registration.score_status_verification()
+        if registration.score_status == "Vous avez déjà noté cette personne, elle doit maintenant vous noter en retour":
+            messages.info(request, ('Vous avez déjà noté cette personne, elle doit maintenant vous noter en retour'))
+        if registration.score_status == 'Vous avez noté cette personne, elle a répondu, notation complète':
+            messages.info(request, ('Vous avez noté cette personne, elle a répondu, notation complète'))
+        if registration.score_status == "Cette personne vous a déjà noté, nous enregistrons votre note envers elle":
+            messages.info(request, ('Cette personne vous a déjà noté, nous enregistrons votre note envers elle'))
+            note = Rating.objects.filter(sender_id=receiver)
+            note = note[0]
+            note.score_received = int(sender_rating_choice)
+            note.score_pending = False
+            note.save()
+        if registration.score_status =='Cette personne vous a noté, vous avez déjà répondu, notation complète':
+            messages.info(request, ('Cette personne vous a noté, vous avez déjà répondu, notation complète'))
+        if registration.score_status == 'Vous êtes le premier à noter cette personne, nous enregistrons votre note':
+            messages.info(request, ('Vous êtes le premier à noter cette personne, nous enregistrons votre note'))
+            note = Rating(sender_id=request.user.pk, receiver_id=(User.objects.get(username=receiver_username)).pk, score_sent=int(sender_rating_choice))
+            note.save()
 
 
     return render(request, "useraccount/score.html", {'receiver':receiver_username})

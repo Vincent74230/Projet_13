@@ -30,6 +30,9 @@
             <button type='submit' name='rating_value' value='5' class='lone_star stars_btn' id="fifth"><i class="fa fa-star" aria-hidden="true"></i>
 </button>
         </form>
+        {% for message in messages %}
+        <span>{{message}}</span>
+        {% endfor %}
 
         </section>
 
