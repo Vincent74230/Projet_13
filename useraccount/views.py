@@ -18,6 +18,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from .services import SERVICES_DICT as services_dict
+from .score_extend import ScoreRegistration
 
 
 class Index(View):
@@ -206,8 +207,13 @@ def my_account(request):
 @login_required
 def score(request):
     """Manages score system between two registered members"""
+    receiver_username = request.GET.get("receiver")
     if request.method == 'POST':
         sender_rating_choice = request.POST.get('rating_value')
-        print(sender_rating_choice)
-    receiver = request.GET.get("receiver")
-    return render(request, "useraccount/score.html", {'receiver':receiver})
+        receiver_username_email = (User.objects.get(username=receiver_username)).email
+        registration = ScoreRegistration(receiver_username, sender_rating_choice, request.user)
+        registration.score_registration_verification()
+
+
+
+    return render(request, "useraccount/score.html", {'receiver':receiver_username})
