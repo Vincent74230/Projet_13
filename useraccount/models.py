@@ -40,10 +40,6 @@ class Rating(models.Model):
     # Boolean that passes to False when 2 users has rated each other
     score_pending = models.BooleanField(default=True)
 
-    # Boolean that indicates admin to check comments before displaying it
-    comment_pending = models.BooleanField(default=True)
-
-    comment = models.CharField(max_length=200, blank=True)
 
     sender = models.ForeignKey(User, on_delete=models.PROTECT, default=None, related_name="sender")
     receiver = models.ForeignKey(
