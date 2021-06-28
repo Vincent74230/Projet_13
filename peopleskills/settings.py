@@ -28,9 +28,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get("ENV", "DEVELOPMENT") == "PRODUCTION":
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '167.99.32.240']
 
 
 # Application definition
@@ -38,7 +41,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost',]
 INSTALLED_APPS = [
     'application.apps.ApplicationConfig',
     'useraccount.apps.UseraccountConfig',
-    'chat.apps.ChatConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,15 +83,27 @@ WSGI_APPLICATION = 'peopleskills.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'echange_dev',
-        'USER': 'echange',
-        'HOST': 'localhost',
-        'PASSWORD': 'Password'
+if os.environ.get("ENV", "DEVELOPMENT") == "PRODUCTION":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'echange_prod',
+            'USER': 'echange',
+            'HOST': 'localhost',
+            'PASSWORD': 'CherryDellInspirionI7!'
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'echange_dev',
+            'USER': 'echange',
+            'HOST': 'localhost',
+            'PASSWORD': 'Password'
+        }
+    }
+
 
 
 # Password validation
