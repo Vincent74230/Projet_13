@@ -10142,8 +10142,8 @@ header.masthead .masthead-heading {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-top: 17rem;
-    padding-bottom: 12.5rem;
+    /*padding-top: 17rem;*/
+    /*padding-bottom: 12.5rem;*/
   }
   header.masthead .masthead-subheading {
     font-size: 2.25rem;
@@ -10481,4 +10481,133 @@ section#contact form#contactForm :-ms-input-placeholder {
   text-align: center;
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/*Customization by Vincent74230*/
+
+.members {
+  height: 4rem;
+  background-color: #fafafa;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  margin-top: 12px;
+}
+
+.services-menu {
+  border:1px solid black;
+  float: left
+}
+
+.results-info {
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1.4rem;
+  margin: 1em;
+  float: left;
+}
+
+.cat_button {
+  background: none;
+  border: none;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1.4rem;
+  color: blue;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.service_button{
+  background: none;
+  border: none;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0;
+}
+
+.upper_reduced_profile{
+  height: 40%;
+  border-bottom: 1px solid black;
+}
+
+#account{
+  display: flex;
+  justify-content: center;
+}
+
+#account_options{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  width: 30%;
+  height: 600px;
+  margin: 10px;
+  padding : 10px;
+}
+
+#account_display{
+  display: flex;
+  flex-direction: column;
+  border-color: solid black;
+  width: 50%;
+  height: 600px;;
+  border: 1px solid black;
+  margin : 10px;
+  padding : 10px;
+}
+
+#user_avatar_and_username{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 300px;
+  border : 1px solid black;
+}
+
+#options{
+  display: flex;
+  flex-direction: column;
+  border : 1px solid black;
+  height: 100%;
+  margin: 12px;
+}
+
+.avatar{
+  height: 150px;
+  width: 150px;
+}
+
+.account_display_title{
+  display:flex;
+  justify-content: space-around;
+  border-bottom: 1px solid lightgrey;
+  height: auto;
+}
+
+#test{
+  border: 1px solid black;
+}
+
+.checked{
+  color: red;
+}
+
+#first_star{
+  border: 1px solid black;
+}
+
+#stars{
+  display: flex;
+  justify-content: center;
+}
+
+.lone_star{
+  margin: 5px;
+  font-size: 2em;
+}
+
+.stars_btn{
+  background-color: inherit !important;
+  border: 0 !important;
 }

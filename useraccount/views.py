@@ -208,10 +208,9 @@ def my_account(request):
 def score(request):
     """Manages score system between two registered members"""
     receiver_username = request.GET.get("receiver")
-    receiver = User.objects.get(username= receiver_username)
+    receiver = User.objects.get(username=receiver_username)
     if request.method == 'POST':
         sender_rating_choice = request.POST.get('rating_value')
-        receiver_username_email = (User.objects.get(username=receiver_username)).email
         registration = ScoreRegistration(receiver_username, sender_rating_choice, request.user)
         registration.score_status_verification()
         if registration.score_status == "Vous avez déjà noté cette personne, elle doit maintenant vous noter en retour":
@@ -228,9 +227,15 @@ def score(request):
         if registration.score_status =='Cette personne vous a noté, vous avez déjà répondu, notation complète':
             messages.info(request, ('Cette personne vous a noté, vous avez déjà répondu, notation complète'))
         if registration.score_status == 'Vous êtes le premier à noter cette personne, nous enregistrons votre note':
-            messages.info(request, ('Vous êtes le premier à noter cette personne, nous enregistrons votre note'))
+            messages.info(request, ('Vous êtes le premier à noter cette personne, nous enregistrons votre note et la prévenons par mail'))
             note = Rating(sender_id=request.user.pk, receiver_id=(User.objects.get(username=receiver_username)).pk, score_sent=int(sender_rating_choice))
             note.save()
+            send_mail(
+                "Bonjour {}, c'est PeopleSkills".format(receiver.username),
+                "L'utilisateur {} souhaite vous attribuer une note, notez-le en retour.\n Rendez-vous sur votre page 'mon compte', onglet 'mes avis'".format(request.user.username),
+                "vincent.nowak@hotmail.fr",
+                [receiver.email],
+            )
 
 
     return render(request, "useraccount/score.html", {'receiver':receiver_username})

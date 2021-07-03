@@ -54,3 +54,42 @@
     // Collapse the navbar when page is scrolled
     $(window).scroll(navbarCollapse);
 })(jQuery); // End of use strict
+
+// Customization by https://github.com/Vincent74230
+
+
+var departements = JSON.parse(document.getElementById('departements_dict').textContent);
+var region=document.getElementById('region-menu');
+var departement=document.getElementById('departement-menu');
+
+var selected_region=departements[region.value];
+Array.from(selected_region).forEach(function(el){
+let option = new Option(el, el);
+departement.appendChild(option);
+});
+
+var dep_choice_pos = document.querySelector('#dep_choice_position');
+document.getElementById('departement-menu').value=(departements[region.value][dep_choice_pos.dataset.value]);
+
+region.addEventListener('change',function(){
+
+    var selected_region=departements[this.value];
+
+    while(departement.options.length > 0){
+        departement.options.remove(0);
+    }
+
+    Array.from(selected_region).forEach(function(el){
+    let option = new Option(el, el);
+    departement.appendChild(option);
+});
+});
+
+
+var cat_choice = document.getElementById('category');
+var sel_cat = document.getElementsByClassName('selected_category');
+for (var x=0; x<sel_cat.length; x++){
+    if (sel_cat[x].dataset.value != cat_choice.dataset.value){
+        sel_cat[x].style.display='none';
+    };
+}

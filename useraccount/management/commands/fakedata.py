@@ -75,8 +75,6 @@ class Command(BaseCommand):
                 score_sent=score_sent_temp,
                 score_received=score_received_temp,
                 score_pending=score_pending_temp,
-                comment_pending=random.choice([True, False]),
-                comment=fake.paragraph(nb_sentences=1, variable_nb_sentences=True),
                 sender=all_users[sender_temp],
                 receiver=all_users[receiver_temp],
             )

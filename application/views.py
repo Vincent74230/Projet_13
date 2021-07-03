@@ -78,7 +78,7 @@ def search_results(request):
     users_info = []
     for user in users:
         single_user_info = {}
-        single_user_info["pk"] = user.pk    
+        single_user_info["pk"] = user.pk
         single_user_info["username"] = user.username
         single_user_info["postcode"] = user.postcode
         single_user_info["gender"] = user.gender
