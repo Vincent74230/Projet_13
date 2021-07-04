@@ -200,7 +200,50 @@ def my_account(request):
             }
         return render(request, 'useraccount/myaccount.html', context)
     if choice == 'mes_avis':
-        return render(request, 'useraccount/myaccount.html', {'choice':choice})
+        #Fetching score received by current user
+        score_received = Rating.objects.filter(receiver_id=request.user.pk)
+
+        #Fetching score sent by current user
+        score_sent = Rating.objects.filter(sender_id=request.user.pk)
+
+        scores_dict_list = []
+        if score_received:
+            for notation in score_received:
+                dico = {}
+                if notation.score_pending:
+                    dico['score_status'] = 'pending'
+                    dico['role'] = 'receiver'
+                    dico['sender'] = User.objects.get(id=notation.sender_id).username
+                    scores_dict_list.append(dico)
+                else:
+                    dico['score_status'] = 'completed'
+                    dico['role'] = 'receiver'
+                    dico['sender'] = User.objects.get(id=notation.sender_id).username
+                    dico['score_sent'] = notation.score_sent
+                    dico['score_received'] = notation.score_received
+                    scores_dict_list.append(dico)
+
+        if score_sent:
+            for notation in score_sent:
+                dico = {}
+                if notation.score_pending:
+                    dico['score_status'] = 'pending'
+                    dico['role'] = 'sender'
+                    dico['receiver'] = User.objects.get(id=notation.receiver_id).username
+                    scores_dict_list.append(dico)
+                else:
+                    dico['score_status'] = 'completed'
+                    dico['role'] = 'sender'
+                    dico['receiver'] = User.objects.get(id=notation.receiver_id).username
+                    dico['score_sent'] = notation.score_sent
+                    dico['score_received'] = notation.score_received
+                    scores_dict_list.append(dico)
+
+        print(scores_dict_list)
+
+        context = {'choice':choice, 'scores_dict_list':scores_dict_list}
+
+        return render(request, 'useraccount/myaccount.html', context)
 
     return render(request, "useraccount/myaccount.html", {'choice':'mon_profil', 'form':form})
 

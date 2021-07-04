@@ -85,8 +85,64 @@
 
                 {% elif choice == 'mes_avis' %}
                 <h3 class='account_display_title'>Mes avis</h3>
+                    {% if scores_dict_list %}
+                        {% for notation in scores_dict_list %}
+
+                            {% if notation.score_status == 'completed' %}
+                                {% if notation.role == 'sender' %}
+                                    <p>Vous avez noté {{notation.receiver}}  {{notation.score_sent}} et vous a noté {{notation.score_received}}</p>
+                                {% endif %}
+                                
+                                {% if notation.role == 'receiver' %}
+                                    <p>{{notation.sender}} vous a noté {{notation.score_sent}} et vous l'avez noté {{notation.score_received}} </p>
+                                {% endif %}
+                            
+
+                            {% else %}
+                                {% if notation.role == 'sender' %}
+                                    <p>Vous avez noté {{notation.receiver}}, il faut maintenant que cette personne vous note en retour.</p>
+                                {% endif %}
+                                {% if notation.role == 'receiver' %}
+                                    <p>{{notation.sender}} vous a noté, cliquez <a href="{% url 'useraccount:score' %}?receiver={{notation.sender}}">ici</a> pour le noter en retour.</p>
+                                {% endif %}
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% else %}
+                        <p> Vous n'avez pas encore de notation </p>
+                    {% endif %}
+
+
                 {% endif %}
             </div>
         </div>
     </section>   
 {% endblock %}
+
+
+
+<!--
+                        {% for notation in scores_dict_list %}
+
+                            {% if notation.score_status == 'completed' %}
+                                {% if notation.role == 'sender' %}
+                                    <p>Vous avez noté {{notation.receiver}}  {{notation.score_sent}} et vous a noté {{notation.score_received}}</p>
+                                {% endif %}
+                                
+                                {% if notation.role == 'receiver' %}
+                                    <p>{{notation.sender}} vous a noté {{notation.score_sent}} et vous l'avez noté {{notation.score_received}} </p>
+                                {% endif %}
+                            
+
+                            {% else %}
+                                {% if notation.role == 'sender' %}
+                                    <p>Vous avez noté {{notation.receiver}}, il faut maintenant que cette personne vous note en retour.</p>
+                                {% endif %}
+                                {% if notation.role == 'receiver' %}
+                                    <p>{{notation.sender}} vous a noté, cliquez ici pour le noter en retour.</p>
+                                {% endif %}
+                            {% endif %}
+
+                        {% endfor %}
+-->
