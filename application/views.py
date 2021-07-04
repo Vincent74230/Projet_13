@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from useraccount.models import User, Category, Services
 from .departements_list import DEPARTEMENTS as departements
 from .search_extend import filter_results, counting_users
+from useraccount.models import User, Rating
 from useraccount.services import SERVICES_DICT
+
 
 
 def index(request):
@@ -87,6 +89,30 @@ def search_results(request):
         single_user_info["email"] = user.email
         users_info.append(single_user_info)
 
+    #Star rating average per user
+    ratings = Rating.objects.filter(score_pending=False)
+    noted_users_list = []
+    for rating in ratings:
+        noted_users_list.append(rating.sender_id)
+        noted_users_list.append(rating.receiver_id)
+
+    noted_users_list = list(set(noted_users_list))
+
+    all_users_average_rating_list = []
+    for noted_user_id in noted_users_list:
+        all_notes_per_user = []
+        average_dict = {}
+        for rating in ratings:
+            if rating.receiver_id == noted_user_id:
+                all_notes_per_user.append(rating.score_sent)
+            if rating.sender_id == noted_user_id:
+                all_notes_per_user.append(rating.score_received)
+        average_note = sum(all_notes_per_user)/len(all_notes_per_user)
+        average_dict[noted_user_id]=average_note
+        all_users_average_rating_list.append(average_dict)
+    print(all_users_average_rating_list)
+
+
     context = {
         "total_nb_users": len(User.objects.all()),
         "nb_users": len(users),
@@ -99,6 +125,7 @@ def search_results(request):
         "cat_dict": category_dict,
         "services_dict": services_dict,
         "users_info": users_info,
+        "average_list":all_users_average_rating_list,
     }
 
     return render(request, "application/search_results.html", context)
