@@ -94,7 +94,16 @@
                                 <p class = 'username'>{{user.username}}</p>
                             </div>
                             {% endif %}
+                            <div class='row'>
+                            {% for notation in average_list %}
+                                {% for k,n in notation.items %}
+                                    {% if k == user.pk%}
+                                        <i class="fa fa-star star_resume"></i><p>{{n}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
                             {% if request.user.is_authenticated %}
+                            </div>
                             <div>
                                 <p>{{user.email}}</p>
                             </div>
