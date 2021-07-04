@@ -1,11 +1,11 @@
 """Tests of useraccount application"""
 import os
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, TestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from pathlib import Path
-from .models import User
+from .models import User, Rating
 from django.core import mail
 from bs4 import BeautifulSoup
 
@@ -112,5 +112,137 @@ class UseraccountLiveTest(LiveServerTestCase):
         password_on_login_page.send_keys("DellInspirion1!")        
         submit_btn = self.driver.find_element_by_id('login_btn')
         submit_btn.send_keys(Keys.RETURN)
-        home_page_title = self.driver.find_element_by_tag_name('h2').text
-        self.assertEqual(home_page_title, 'SERVICES')
+
+class ScoreRegistrationTest(TestCase):
+    '''Tests of score registration'''
+    def setUp(self):
+        fake_user = User.objects.create_user(
+            username="VincentTest1",
+            password="Testpassword1",
+            first_name="Vincent",
+            last_name="VinceNow",
+            email="vince1@gmail.com",
+            gender=True,
+            postcode="73000",
+        )
+        fake_user.save()
+
+        fake_user = User.objects.create_user(
+            username="VincentTest2",
+            password="Testpassword2",
+            first_name="Jules",
+            last_name="Nono",
+            email="vince2@gmail.com",
+            gender=True,
+            postcode="74230",
+        )
+        fake_user.save()
+
+        fake_user = User.objects.create_user(
+            username="AliceTest1",
+            password="Testpassword3",
+            first_name="Alice",
+            last_name="Wonderland",
+            email="alice@gmail.com",
+            gender=False,
+            postcode="44000",
+        )
+        fake_user.save()
+
+    def test_score_registration(self):
+        users = User.objects.all()
+        self.assertEqual(len(users), 3)
+
+        response = self.client.get(
+            "/useraccount/score",
+            {
+                "receiver": "AliceTest1",
+            },
+        )
+        #User not connected, redirect to homepage
+        self.assertEqual(response.status_code, 302)
+
+        self.client.login(username='VincentTest1', password='Testpassword1')
+
+        #Wrong user to be noted
+        response = self.client.get(
+            "/useraccount/score",
+            {
+                "receiver": "Alice",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+
+        response = self.client.get(
+            "/useraccount/score",
+            {
+                "receiver": "AliceTest1",
+            },
+        )
+        #User not connected, redirect to homepage
+        self.assertEqual(response.status_code, 200)
+
+        #Nothing in the mailbox before rating another user
+        self.assertEqual(len(mail.outbox), 0)
+
+        response = self.client.post(
+            "/useraccount/score?receiver=AliceTest1",
+            {
+                "rating_value": 5,
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        alice = User.objects.get(username='AliceTest1')
+
+        alice_vincent_rating = Rating.objects.get(receiver_id=alice.id)
+
+        self.assertEqual(alice_vincent_rating.score_pending, True)
+        self.assertEqual(alice_vincent_rating.score_sent, 5)
+
+        response = self.client.post(
+            "/useraccount/score?receiver=AliceTest1",
+            {
+                "rating_value": 4,
+            },
+        )
+
+        #Impossible to note another user twice
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(alice_vincent_rating.score_sent, 5)
+
+        #Check if mail has been send
+        self.assertEqual(len(mail.outbox), 1)
+
+        self.client.logout()
+
+        #Alice now noting Vincent
+        self.client.login(username='AliceTest1', password='Testpassword3')
+
+        response = self.client.post(
+            "/useraccount/score?receiver=VincentTest1",
+            {
+                "rating_value": 4,
+            },
+        )
+
+        #Check if bool switched to False, and registered score
+        alice_vincent_rating = Rating.objects.get(receiver_id=alice.id)
+        self.assertEqual(alice_vincent_rating.score_pending, False)
+        self.assertEqual(alice_vincent_rating.score_received, 4)
+
+        #A user cannot note himself
+
+        response = self.client.post(
+            "/useraccount/score?receiver=AliceTest1",
+            {
+                "rating_value": 5,
+            },
+        )
+
+        all_ratings = Rating.objects.all()
+        self.assertEqual(len(all_ratings),1)
+        self.assertEqual(response.status_code, 302)

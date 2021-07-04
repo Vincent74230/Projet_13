@@ -282,12 +282,23 @@ def my_account(request):
 @login_required
 def score(request):
     """Manages score system between two registered members"""
+    # Cannot note wrong user
     receiver_username = request.GET.get("receiver")
+    username_list = []
+    users = User.objects.all()
+    for user in users:
+        username_list.append(user.username)
+
+    if receiver_username not in username_list:
+        return redirect('/')
+
     receiver = User.objects.get(username=receiver_username)
 
     # A user cannot note himself..
     if request.user.username == receiver_username:
         return redirect('/')
+
+
     if request.method == "POST":
         sender_rating_choice = request.POST.get("rating_value")
         registration = ScoreRegistration(

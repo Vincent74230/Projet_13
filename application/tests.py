@@ -417,7 +417,7 @@ class FilterResultsTest(TestCase):
 
 
 class Hosttest(LiveServerTestCase):
-    """Browser tests"""
+    """Browser tests index page and search bar"""
 
     @classmethod
     def setUpClass(cls):
@@ -450,4 +450,4 @@ class Hosttest(LiveServerTestCase):
         rechercher_btn.send_keys(Keys.RETURN)
         all_users = self.driver.find_elements_by_class_name("services-menu")
 
-        self.assertEqual(len(all_users), 0)
+        self.assertEqual(len(all_users), 1)

@@ -110,7 +110,6 @@ def search_results(request):
         average_note = sum(all_notes_per_user)/len(all_notes_per_user)
         average_dict[noted_user_id]=average_note
         all_users_average_rating_list.append(average_dict)
-    print(all_users_average_rating_list)
 
 
     context = {
