@@ -284,6 +284,10 @@ def score(request):
     """Manages score system between two registered members"""
     receiver_username = request.GET.get("receiver")
     receiver = User.objects.get(username=receiver_username)
+
+    # A user cannot note himself..
+    if request.user.username == receiver_username:
+        return redirect('/')
     if request.method == "POST":
         sender_rating_choice = request.POST.get("rating_value")
         registration = ScoreRegistration(
