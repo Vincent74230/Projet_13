@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv(find_dotenv())
 
@@ -93,6 +95,19 @@ if os.environ.get("ENV", "DEVELOPMENT") == "PRODUCTION":
             'PASSWORD': 'CherryDellInspirionI7!'
         }
     }
+    sentry_sdk.init(
+    dsn="https://f4c76700ccf24a4aafb46ba921f2cc4b@o485927.ingest.sentry.io/5848052",
+    integrations=[DjangoIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+    )
 else:
     DATABASES = {
         'default': {
