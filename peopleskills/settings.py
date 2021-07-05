@@ -35,7 +35,7 @@ if os.environ.get("ENV", "DEVELOPMENT") == "PRODUCTION":
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '167.99.32.240']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '167.99.32.240', 'www.peopleskills.xyz', 'peopleskills.xyz']
 
 
 # Application definition
@@ -171,6 +171,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'vincent.nowak@hotmail.fr'
-EMAIL_HOST_PASSWORD = 'IntelCoreI7!'
+EMAIL_HOST_PASSWORD = os.environ.get('SMTP_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
