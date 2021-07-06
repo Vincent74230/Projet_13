@@ -174,3 +174,4 @@ EMAIL_HOST_USER = 'vincent.nowak@hotmail.fr'
 EMAIL_HOST_PASSWORD = os.environ.get('SMTP_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
