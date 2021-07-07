@@ -19,5 +19,4 @@ services:
   - postgresql
 
 script:
-  - python manage.py fakedata
-  - python manage.py test
+  - python manage.py test --exclude-tag=not_in_CI

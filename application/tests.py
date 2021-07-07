@@ -1,4 +1,4 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase, LiveServerTestCase, tag
 from django.urls import reverse
 from useraccount.models import User, Services, Category
 from useraccount.services import SERVICES_DICT as services_dict
@@ -415,7 +415,7 @@ class FilterResultsTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-
+@tag('not_in_CI')
 class Hosttest(LiveServerTestCase):
     """Browser tests index page and search bar"""
 

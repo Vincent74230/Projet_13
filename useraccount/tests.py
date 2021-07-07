@@ -1,6 +1,6 @@
 """Tests of useraccount application"""
 import os
-from django.test import LiveServerTestCase, TestCase
+from django.test import LiveServerTestCase, TestCase, tag
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
@@ -10,6 +10,7 @@ from django.core import mail
 from bs4 import BeautifulSoup
 
 
+@tag('not_in_CI')
 class UseraccountLiveTest(LiveServerTestCase):
     """tests sign in, email confirmation, login, logout"""
 
