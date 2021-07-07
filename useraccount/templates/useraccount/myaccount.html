@@ -56,6 +56,7 @@
                     {% for category, services in services_dict.items %}
                     <h3>{{category}}</h3></br>
                     {% for service in services %}
+                    <div class='display_services_choice'>
                     <p>{{service}}</p>
 
                     {% if user_required_services_name %}
@@ -77,6 +78,7 @@
                     {% else %}
                         <p>Je propose</p><input name='proposed' type='checkbox'value='{{service}}'/>
                     {% endif %}
+                    </div>
 
                     {% endfor %}
                     {% endfor %}
@@ -119,30 +121,3 @@
         </div>
     </section>   
 {% endblock %}
-
-
-
-<!--
-                        {% for notation in scores_dict_list %}
-
-                            {% if notation.score_status == 'completed' %}
-                                {% if notation.role == 'sender' %}
-                                    <p>Vous avez noté {{notation.receiver}}  {{notation.score_sent}} et vous a noté {{notation.score_received}}</p>
-                                {% endif %}
-                                
-                                {% if notation.role == 'receiver' %}
-                                    <p>{{notation.sender}} vous a noté {{notation.score_sent}} et vous l'avez noté {{notation.score_received}} </p>
-                                {% endif %}
-                            
-
-                            {% else %}
-                                {% if notation.role == 'sender' %}
-                                    <p>Vous avez noté {{notation.receiver}}, il faut maintenant que cette personne vous note en retour.</p>
-                                {% endif %}
-                                {% if notation.role == 'receiver' %}
-                                    <p>{{notation.sender}} vous a noté, cliquez ici pour le noter en retour.</p>
-                                {% endif %}
-                            {% endif %}
-
-                        {% endfor %}
--->

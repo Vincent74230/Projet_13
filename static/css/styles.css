@@ -10551,7 +10551,7 @@ section#contact form#contactForm :-ms-input-placeholder {
   flex-direction: column;
   border-color: solid black;
   width: 50%;
-  height: 600px;;
+  height: auto;
   border: 1px solid black;
   margin : 10px;
   padding : 10px;
@@ -10614,4 +10614,9 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 .star_resume{
   color: yellow;
+}
+
+.display_services_choice{
+  display: flex;
+  justify-content: space-between;
 }
