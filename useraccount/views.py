@@ -23,6 +23,8 @@ class Index(View):
     template_name = "useraccount/index.html"
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/')
         form = self.form_class()
         return render(
             request,
