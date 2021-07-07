@@ -10539,9 +10539,10 @@ section#contact form#contactForm :-ms-input-placeholder {
 #account_options{
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 3px solid lightblue;
+  border-radius: 12px;
   width: 30%;
-  height: 600px;
+  height: 350px;
   margin: 10px;
   padding : 10px;
 }
@@ -10552,7 +10553,8 @@ section#contact form#contactForm :-ms-input-placeholder {
   border-color: solid black;
   width: 50%;
   height: auto;
-  border: 1px solid black;
+  border: 3px solid lightblue;
+  border-radius: 12px;
   margin : 10px;
   padding : 10px;
 }
@@ -10562,13 +10564,11 @@ section#contact form#contactForm :-ms-input-placeholder {
   justify-content: space-around;
   align-items: center;
   height: 300px;
-  border : 1px solid black;
 }
 
 #options{
   display: flex;
   flex-direction: column;
-  border : 1px solid black;
   height: 100%;
   margin: 12px;
 }
@@ -10619,4 +10619,32 @@ section#contact form#contactForm :-ms-input-placeholder {
 .display_services_choice{
   display: flex;
   justify-content: space-between;
+}
+
+@media all and (max-width: 1024px){
+  #account{
+    display: flex;
+    flex-direction: column;
+  }
+  #account_options{
+  display: flex;
+  flex-direction: column;
+  border: 3px solid lightblue;
+  border-radius: 12px;
+  width: auto;
+  height: 300px;
+  margin: 10px;
+  padding : 10px;
+}
+#account_display{
+  display: flex;
+  flex-direction: column;
+  border-color: solid black;
+  width: auto;
+  height: auto;
+  border: 3px solid lightblue;
+  border-radius: 12px;
+  margin : 10px;
+  padding : 10px;
+}
 }
