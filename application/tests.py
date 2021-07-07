@@ -448,6 +448,6 @@ class Hosttest(LiveServerTestCase):
         drp = Select(region_menu)
         drp.select_by_visible_text("Toute la France/Régions")
         rechercher_btn.send_keys(Keys.RETURN)
-        all_users = self.driver.find_elements_by_class_name("services-menu")
+        category_tag = self.driver.find_elements_by_tag_name("h4")
 
-        self.assertEqual(len(all_users), 1)
+        self.assertEqual(len(category_tag), 1)

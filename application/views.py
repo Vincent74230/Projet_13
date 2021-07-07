@@ -128,3 +128,11 @@ def search_results(request):
     }
 
     return render(request, "application/search_results.html", context)
+
+def mentions_legales(request):
+    """Shows terms of use page"""
+    return render(request, "application/mentions_legales.html", {})
+
+def about(request):
+    """Shows info about me"""
+    return render(request, "application/about.html", {})

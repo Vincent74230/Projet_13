@@ -14,7 +14,6 @@ Les utilisateurs peuvent:
 - Consulter la liste des membres inscrits  
 - Créer un compte, éditer leur profil en choisissant des services recherchés et offerts  
 - Trouver un profil particulier en fonction de critères de recherche  
-- Contacter un autre membre via messagerie interne  
+- Contacter un autre membre en voyant leur mail 
 - S'inscrire à une alerte par mail si un autre membre souhaite les contacter  
-- Noter un autre membre et laisser un commentaire  
-- Publier des annonces  
+- Noter un autre membre
