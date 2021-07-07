@@ -10621,6 +10621,11 @@ section#contact form#contactForm :-ms-input-placeholder {
   justify-content: space-between;
 }
 
+#register_form{
+  display: flex;
+  justify-content: center;
+}
+
 @media all and (max-width: 1024px){
   #account{
     display: flex;

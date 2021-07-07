@@ -32,7 +32,20 @@
                 <h3 class='account_display_title'>Mon profil</h3>
                 <form action = '' method = 'post'>
                     {% csrf_token %}
-                    {{form.as_p}}
+                    {% for field in form %}
+                    <!--{{form.as_p}}-->
+                    {% if field.html_name != 'gender' %}
+                    <div class='field'>
+                    <label for="{{field.id_for_label}}">{{field.html_name}}</label>
+                    {{ field }}
+                    </div>
+                    {% else %}
+                    <div class='field'>
+                    <label for="{{field.id_for_label}}">{{field.html_name}}</label>
+                    {{ field }}  Homme:coché   Femme:décoché
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                     {% for message in messages %}
                     <p>{{message}}</p>
                     {% endfor %}
