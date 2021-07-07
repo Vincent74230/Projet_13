@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from pathlib import Path
-from .models import User, Rating
+from .models import User, Rating, Services
 from django.core import mail
 from bs4 import BeautifulSoup
 
@@ -246,3 +246,46 @@ class ScoreRegistrationTest(TestCase):
         all_ratings = Rating.objects.all()
         self.assertEqual(len(all_ratings),1)
         self.assertEqual(response.status_code, 302)
+
+class ModifyMyServices(TestCase):
+    """class that tests users's proposed and required services changes"""
+    def setUp(self):
+        fake_user = User.objects.create_user(
+            username="VincentTest3",
+            password="Testpassword3",
+            first_name="Vincent",
+            last_name="VinceNow",
+            email="vince1@gmail.com",
+            gender=True,
+            postcode="73000",
+        )
+        fake_user.save()
+
+    def test_modifying_services(self):
+        user = User.objects.get(username='VincentTest3')
+
+        #Check redirect if user is logged out
+        response = self.client.get(
+            "/useraccount/myaccount",
+            {
+                "choice": "Mes_services",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        #now user connected
+        self.client.login(username='VincentTest3', password='Testpassword3')
+        response = self.client.get(
+            "/useraccount/myaccount",
+            {
+                "choice": "Mes_services",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+
+        #check no services registered
+        user_required_services = user.required_services.all()
+        user_proposed_services = user.proposed_services.all()
+        self.assertEqual(len(user_required_services), 0)
+        self.assertEqual(len(user_proposed_services), 0)
