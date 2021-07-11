@@ -451,3 +451,18 @@ class Hosttest(LiveServerTestCase):
         category_tag = self.driver.find_elements_by_tag_name("h4")
 
         self.assertEqual(len(category_tag), 1)
+
+
+class TermsPage(TestCase):
+    """Tests of main page display"""
+
+    def test_terms_page_display(self):
+        response = self.client.get("/mentions_legales")
+        self.assertEqual(response.status_code, 200)
+
+class AboutPage(TestCase):
+    """Tests of main page display"""
+
+    def test_about_page_display(self):
+        response = self.client.get("/A_propos")
+        self.assertEqual(response.status_code, 200)
